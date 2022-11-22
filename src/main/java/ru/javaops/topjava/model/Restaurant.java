@@ -13,7 +13,7 @@ import java.io.Serial;
 import java.util.List;
 
 @Entity
-@Table(name = "restaurants")
+@Table(name = "restaurant")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,7 +21,9 @@ public class Restaurant extends NamedEntity {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public Restaurant(int id, String name){ super(id, name);};
+    public Restaurant(int id, String name) {
+        super(id, name);
+    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("date DESC")

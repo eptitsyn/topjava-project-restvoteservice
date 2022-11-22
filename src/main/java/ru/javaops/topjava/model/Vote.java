@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@IdClass(Vote.RestaurantDatePK.class)
-@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "meal_unique_user_date_idx")})
+@IdClass(Vote.UserDatePK.class)
+@Table(name = "vote")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,7 +39,7 @@ public class Vote {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class RestaurantDatePK implements Serializable {
+    public static class UserDatePK implements Serializable {
         private Integer user;
         private LocalDate date;
     }

@@ -8,13 +8,16 @@ VALUES ('USER', 1),
        ('ADMIN', 2),
        ('USER', 2);
 
-INSERT INTO MEAL (date_time, description, calories, user_id)
-VALUES ('2020-01-30 10:00:00', 'Завтрак', 500, 1),
-       ('2020-01-30 13:00:00', 'Обед', 1000, 1),
-       ('2020-01-30 20:00:00', 'Ужин', 500, 1),
-       ('2020-01-31 0:00:00', 'Еда на граничное значение', 100, 1),
-       ('2020-01-31 10:00:00', 'Завтрак', 500, 1),
-       ('2020-01-31 13:00:00', 'Обед', 1000, 1),
-       ('2020-01-31 20:00:00', 'Ужин', 510, 1),
-       ('2020-01-31 14:00:00', 'Админ ланч', 510, 2),
-       ('2020-01-31 21:00:00', 'Админ ужин', 1500, 2);
+INSERT INTO RESTAURANT (ID, NAME)
+VALUES (1, 'Manon'),
+       (2, 'Pushkin'),
+       (3, 'Shinok');
+
+INSERT INTO MENU (RESTAURANT_ID, DATE, DESCRIPTION)
+VALUES (1, CURRENT_DATE, 'Manon menu'),
+       (2, CURRENT_DATE, 'Pushkin menu'),
+       (3, CURRENT_DATE, 'Shinok menu'),
+       (1, TIMESTAMPADD(DAY, 1, CURRENT_DATE), 'Manon menu +1'),
+       (2, TIMESTAMPADD(DAY, 1, CURRENT_DATE), 'Pushkin menu +1'),
+       (3, TIMESTAMPADD(DAY, 1, CURRENT_DATE), 'Shinok menu +1');
+

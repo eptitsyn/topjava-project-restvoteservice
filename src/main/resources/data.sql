@@ -13,11 +13,5 @@ VALUES (1, 'Manon'),
        (2, 'Pushkin'),
        (3, 'Shinok');
 
-INSERT INTO MENU (RESTAURANT_ID, DATE, DESCRIPTION)
-VALUES (1, CURRENT_DATE, 'Manon menu'),
-       (2, CURRENT_DATE, 'Pushkin menu'),
-       (3, CURRENT_DATE, 'Shinok menu'),
-       (1, TIMESTAMPADD(DAY, 1, CURRENT_DATE), 'Manon menu +1'),
-       (2, TIMESTAMPADD(DAY, 1, CURRENT_DATE), 'Pushkin menu +1'),
-       (3, TIMESTAMPADD(DAY, 1, CURRENT_DATE), 'Shinok menu +1');
+
 

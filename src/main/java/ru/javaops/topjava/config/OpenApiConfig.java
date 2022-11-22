@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "REST API documentation",
-                version = "3.0",
+                version = "1.0",
                 description = """
                         Приложение по <a href='https://javaops.ru/view/topjava'>курсу TopJava</a>
                         <p><b>Тестовые креденшелы:</b><br>

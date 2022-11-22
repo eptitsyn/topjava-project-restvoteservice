@@ -18,10 +18,10 @@ Build a voting system for deciding where to have lunch.
 
 Each restaurant provides a new menu each day.
 
-As a result, provide a link to github repository. It should contain the code, README.md with API documentation and couple curl commands to test it (**better - link to Swagger**).
+As a result, provide a link to GitHub repository. It should contain the code, README.md with API documentation and couple curl commands to test it (**better - link to Swagger**).
 
-[REST API documentation](https://eptitsyn.stoplight.io/docs/restvote/e17dh0x9i8e4j-restvote  
-Креденшелы:
+[REST API documentation](https://eptitsyn.stoplight.io/docs/restvote/) 
+Данные для доступа:
 ```
 Admin: admin@gmail.com / admin
 User:  user@yandex.ru / password

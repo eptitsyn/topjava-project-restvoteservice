@@ -13,6 +13,7 @@ import java.util.LinkedList;
 @Slf4j
 public class HashMapConverter implements AttributeConverter<LinkedList<Item>, String> {
 
+    //TODO remove class
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

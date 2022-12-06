@@ -33,7 +33,7 @@ spring:
     username: sa
     password:
 
-# Jackson Serialization Issue Resolver
+  # Jackson Serialization Issue Resolver
   jackson.visibility:
     field: any
     getter: none
@@ -44,6 +44,9 @@ spring:
   cache:
     cache-names: users
     caffeine.spec: maximumSize=5000,expireAfterAccess=60s
+#  data:
+#    rest:
+#      base-path: "/api"
 
 logging:
   level:

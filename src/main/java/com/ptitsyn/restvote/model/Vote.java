@@ -34,6 +34,7 @@ public class Vote {
     @Id
     @Column(name = "date", nullable = false)
     @NotNull
+    //TODO rename
     private LocalDate date;
 
     @EqualsAndHashCode

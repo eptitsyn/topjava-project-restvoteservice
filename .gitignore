@@ -6,3 +6,4 @@ log
 /patch
 /db
 pom.xml.versionsBackup
+.DS_Store

@@ -6,18 +6,20 @@ import com.ptitsyn.restvote.web.AuthUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = com.ptitsyn.restvote.web.restaurant.RestaurantAdminController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
-public class RestaurantController {
+@Secured("ROLE_ADMIN")
+public class RestaurantAdminController {
 
-    static final String REST_URL = "/api/restaurants";
+    static final String REST_URL = "/api/admin/restaurants";
 
     RestaurantService service;
 
@@ -48,4 +50,5 @@ public class RestaurantController {
         service.delete(id);
     }
 }
+
 

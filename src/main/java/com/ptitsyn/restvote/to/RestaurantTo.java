@@ -7,6 +7,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class RestaurantTo extends NamedTo {
+    //TODO get rid of TO
 
     private Menu todayMenu;
 

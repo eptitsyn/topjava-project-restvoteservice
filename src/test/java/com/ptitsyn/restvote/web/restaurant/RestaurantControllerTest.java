@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static com.ptitsyn.restvote.web.RestaurantTestData.RESTAURANT_MATCHER;
 import static com.ptitsyn.restvote.web.RestaurantTestData.restaurant1;
 import static com.ptitsyn.restvote.web.TestUtil.userHttpBasic;
-import static com.ptitsyn.restvote.web.user.UserTestData.ADMIN_ID;
 import static com.ptitsyn.restvote.web.user.UserTestData.admin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,7 +33,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID)
+        perform(MockMvcRequestBuilders.get(REST_URL + restaurant1.id())
                 .with(userHttpBasic(admin)))
                 .andExpect(status().isOk())
                 .andDo(print())

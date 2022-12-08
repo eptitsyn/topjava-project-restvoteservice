@@ -23,7 +23,7 @@ public class Restaurant extends NamedEntity {
 //    @Schema(hidden = true)
 //    private List<Menu> menus;
 
-    public Restaurant(int id, String name) {
+    public Restaurant(Integer id, String name) {
         super(id, name);
     }
 }

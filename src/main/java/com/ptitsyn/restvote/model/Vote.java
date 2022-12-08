@@ -17,6 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class Vote {
+//TODO add index
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)

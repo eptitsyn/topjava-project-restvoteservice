@@ -13,5 +13,5 @@ VALUES (1, 'Manon'),
        (2, 'Pushkin'),
        (3, 'Shinok');
 
-
-
+ALTER TABLE RESTAURANT
+    ALTER COLUMN id RESTART WITH 4;

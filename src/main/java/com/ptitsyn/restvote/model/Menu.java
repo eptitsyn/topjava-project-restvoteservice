@@ -13,13 +13,13 @@ import java.util.LinkedList;
 
 
 @Entity
-
-@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(name = "UniqueRestaurantAndDate", columnNames = {"restaurant_id", "date"})})
+@Table(name = "menu", indexes = @Index(name = "uniqueMultiIndex", columnList = "restaurant_id, date", unique = true))
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Menu extends BaseEntity {
+    //TODO add index
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

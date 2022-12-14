@@ -1,5 +1,6 @@
 package com.ptitsyn.restvote.web.restaurant;
 
+import com.ptitsyn.restvote.error.NotFoundException;
 import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.service.RestaurantService;
 import com.ptitsyn.restvote.util.JsonUtil;
@@ -13,6 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static com.ptitsyn.restvote.web.RestaurantTestData.*;
 import static com.ptitsyn.restvote.web.TestUtil.userHttpBasic;
 import static com.ptitsyn.restvote.web.user.UserTestData.admin;
+import static com.ptitsyn.restvote.web.user.UserTestData.user;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,7 +28,13 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     private RestaurantService restaurantService;
 
     @Test
-    void getAll() {
+    void getAll() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(userHttpBasic(admin)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(RESTAURANT_MATCHER.contentJson(restaurants));
     }
 
     @Test
@@ -63,10 +72,36 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        Restaurant updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL + updated.id()).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isNoContent());
+
+        RESTAURANT_MATCHER.assertMatch(restaurantService.get(updated.id()), updated);
     }
 
     @Test
-    void delete() {
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + restaurant1.id())
+                .with(userHttpBasic(admin)))
+                .andExpect(status().isNoContent());
+        assertThrows(NotFoundException.class, () -> restaurantService.get(restaurant1.id()));
+    }
+
+    @Test
+    void getFailAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + restaurant1.id()))
+                .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    void getTryUserAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + restaurant1.id())
+                .with(userHttpBasic(user)))
+                .andExpect(status().isForbidden())
+                .andDo(print());
     }
 }

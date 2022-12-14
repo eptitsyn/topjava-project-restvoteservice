@@ -17,18 +17,17 @@ import org.springframework.web.bind.annotation.*;
 @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
 public class VoteController {
 
-    static final String REST_URL = "/api/vote";
+    static final String REST_URL = "/api/votes";
 
     private final VoteService voteService;
 
     @GetMapping
     public Vote getVote(@AuthenticationPrincipal AuthUser authUser) {
-        //TODO
-        return null;
+        return voteService.get(authUser.getUser());
     }
 
-    @PutMapping("/{restaurant_id}")
-    public void setVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable int restaurant_id) {
-        voteService.Vote(authUser, restaurant_id);
+    @PutMapping
+    public void setVote(@AuthenticationPrincipal AuthUser authUser, @RequestBody int restaurant_id) {
+        voteService.vote(authUser.getUser(), restaurant_id);
     }
 }

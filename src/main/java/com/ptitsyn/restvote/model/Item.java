@@ -9,7 +9,6 @@ import javax.persistence.Embeddable;
 @Setter
 @Embeddable
 public class Item {
-
     private double description;
     private double price;
 }

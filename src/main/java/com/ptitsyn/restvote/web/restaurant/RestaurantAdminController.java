@@ -32,7 +32,7 @@ public class RestaurantAdminController {
     @GetMapping
     public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
         log.info("getAll for user {}", authUser.id());
-        return service.getAllWithMenu();
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
@@ -52,6 +52,7 @@ public class RestaurantAdminController {
     }
 
     @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     void update(@RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {}", restaurant);
         assureIdConsistent(restaurant, id);
@@ -64,6 +65,8 @@ public class RestaurantAdminController {
         log.info("delete {}", id);
         service.delete(id);
     }
+
+
 }
 
 

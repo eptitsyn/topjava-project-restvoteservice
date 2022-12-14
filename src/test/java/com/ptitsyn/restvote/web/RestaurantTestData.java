@@ -16,4 +16,8 @@ public class RestaurantTestData {
     public static Restaurant getNew() {
         return new Restaurant(null, "NewRestaurant");
     }
+
+    public static Restaurant getUpdated() {
+        return new Restaurant(restaurant2.id(), "New" + restaurant2.getName());
+    }
 }

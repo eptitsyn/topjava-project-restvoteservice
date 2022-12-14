@@ -12,7 +12,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
 
     //@EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r")
-    List<Restaurant> getAllWithMenu();
+    List<Restaurant> getAll();
 
     //@EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=?1")

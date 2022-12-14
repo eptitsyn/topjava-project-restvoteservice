@@ -1,12 +1,14 @@
 package com.ptitsyn.restvote.repository;
 
+import com.ptitsyn.restvote.model.User;
 import com.ptitsyn.restvote.model.Vote;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
-public interface VoteRepository extends JpaRepository<Vote, Vote.UserDatePK> {
+@Transactional
+public interface VoteRepository extends BaseRepository<Vote> {
 
-    List<Vote> getAllByDate(LocalDate date);
+    Vote findByUserAndDate(@NonNull User user, @NonNull LocalDate date);
 }

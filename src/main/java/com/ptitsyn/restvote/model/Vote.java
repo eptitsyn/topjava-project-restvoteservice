@@ -2,50 +2,38 @@ package com.ptitsyn.restvote.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@IdClass(Vote.UserDatePK.class)
-@Table(name = "vote")
+@Table(name = "vote", indexes = @Index(name = "uniqueVoteUserIdDate_idx", columnList = "user_id, date", unique = true))
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class Vote {
-//TODO add index
+public class Vote extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private Restaurant restaurant;
 
-    @Id
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Id
     @Column(name = "date", nullable = false)
     @NotNull
-    //TODO rename
     private LocalDate date;
-
-    @EqualsAndHashCode
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class UserDatePK implements Serializable {
-
-        private Integer user;
-        private LocalDate date;
-    }
 }

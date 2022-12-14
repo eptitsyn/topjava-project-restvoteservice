@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serial;
 
 @Entity
 @Table(name = "restaurant")
@@ -15,13 +16,9 @@ import javax.persistence.Table;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant extends NamedEntity {
 
-//    @Serial
-//    private static final long serialVersionUID = 1L;
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    @OrderBy("date DESC")
-//    @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
-//    @Schema(hidden = true)
-//    private List<Menu> menus;
+    @Serial
+    private static final long serialVersionUID = 1L;
+
 
     public Restaurant(Integer id, String name) {
         super(id, name);

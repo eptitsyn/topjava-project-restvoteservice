@@ -15,3 +15,18 @@ VALUES (1, 'Manon'),
 
 ALTER TABLE RESTAURANT
     ALTER COLUMN id RESTART WITH 4;
+
+INSERT INTO MENU (ID, DATE, RESTAURANT_ID, MENU)
+VALUES (1, CURRENT_DATE, 1, '{}'),
+       (2, CURRENT_DATE, 2, '{}'),
+       (3, CURRENT_DATE, 3, '{}'),
+       (4, DATEADD(DAY, 1, CURRENT_DATE), 1, '{}'),
+       (5, DATEADD(DAY, 1, CURRENT_DATE), 2, '{}'),
+       (6, DATEADD(DAY, 1, CURRENT_DATE), 3, '{}'),
+       (7, DATEADD(DAY, -1, CURRENT_DATE), 1, '{}'),
+       (8, DATEADD(DAY, -1, CURRENT_DATE), 2, '{}'),
+       (9, DATEADD(DAY, -1, CURRENT_DATE), 3, '{}');
+
+ALTER TABLE MENU
+    ALTER COLUMN id RESTART WITH 10;
+

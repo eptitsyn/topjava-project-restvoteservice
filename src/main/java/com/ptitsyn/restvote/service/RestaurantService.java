@@ -4,9 +4,9 @@ import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.repository.RestaurantRepository;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.checkNew;
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.checkNotFoundWithId;
@@ -29,7 +29,7 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getAllWithMenu() {
-        return repository.getAllWithMenu();
+        return repository.getAll();
     }
 
     public void update(@NonNull Restaurant restaurant, int id) {
@@ -37,8 +37,12 @@ public class RestaurantService {
     }
 
     public Restaurant create(Restaurant restaurant) {
-        Assert.notNull("Restaurant should not be null");
+        Objects.requireNonNull(restaurant, "Restaurant should not be null");
         checkNew(restaurant);
         return repository.save(restaurant);
+    }
+
+    public List<Restaurant> getAll() {
+        return repository.getAll();
     }
 }

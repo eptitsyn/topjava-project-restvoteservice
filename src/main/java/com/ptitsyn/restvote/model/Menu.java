@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ptitsyn.restvote.util.convertor.HashMapConverter;
 import com.ptitsyn.restvote.util.validation.NoHtml;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +15,7 @@ import java.util.LinkedList;
 
 
 @Entity
-@Table(name = "menu", indexes = @Index(name = "uniqueMultiIndex", columnList = "restaurant_id, date", unique = true))
+@Table(name = "menu", indexes = @Index(name = "uniqueRestaurantIdDate_idx", columnList = "restaurant_id, date", unique = true))
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +28,7 @@ public class Menu extends BaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @JsonIgnore
     @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)

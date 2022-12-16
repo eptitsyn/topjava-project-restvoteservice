@@ -10,18 +10,19 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.LinkedList;
 
 
 @Entity
-@Table(name = "menu", indexes = @Index(name = "uniqueRestaurantIdDate_idx", columnList = "restaurant_id, date", unique = true))
+@Table(name = "menu")
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@IdClass(Menu.RestaurantDatePK.class)
 @ToString(callSuper = true)
-public class Menu extends BaseEntity {
-    //TODO add index
+public class Menu {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -29,16 +30,28 @@ public class Menu extends BaseEntity {
     @JsonIgnore
     @ToString.Exclude
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Id
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
     @NotNull
-    //TODO rename
+    @Id
     private LocalDate date;
 
-    @Column(name = "menu", nullable = false)
+    @Column(name = "dishes", nullable = false)
     @NotBlank
     @NoHtml
     @Convert(converter = HashMapConverter.class)
-    private LinkedList<Item> menu;
+    private LinkedList<Dish> dishes;
+
+    @EqualsAndHashCode
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RestaurantDatePK implements Serializable {
+
+        private Integer restaurant;
+        private LocalDate date;
+    }
 }

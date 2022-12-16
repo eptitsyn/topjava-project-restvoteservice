@@ -3,7 +3,7 @@ package com.ptitsyn.restvote.util.convertor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptitsyn.restvote.model.Item;
+import com.ptitsyn.restvote.model.Dish;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.AttributeConverter;
@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 @Slf4j
-public class HashMapConverter implements AttributeConverter<LinkedList<Item>, String> {
+public class HashMapConverter implements AttributeConverter<LinkedList<Dish>, String> {
 
     //TODO remove class
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(LinkedList<Item> customerInfo) {
+    public String convertToDatabaseColumn(LinkedList<Dish> customerInfo) {
 
         String customerInfoJson = null;
         try {
@@ -31,12 +31,12 @@ public class HashMapConverter implements AttributeConverter<LinkedList<Item>, St
     }
 
     @Override
-    public LinkedList<Item> convertToEntityAttribute(String customerInfoJSON) {
+    public LinkedList<Dish> convertToEntityAttribute(String customerInfoJSON) {
 
-        LinkedList<Item> customerInfo = null;
+        LinkedList<Dish> customerInfo = null;
         try {
             customerInfo = objectMapper.readValue(customerInfoJSON,
-                    new TypeReference<LinkedList<Item>>() {
+                    new TypeReference<LinkedList<Dish>>() {
                     });
         } catch (final IOException e) {
             log.error("JSON reading error", e);

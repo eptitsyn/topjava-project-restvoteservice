@@ -7,12 +7,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.ptitsyn.restvote.web.restaurant.RestaurantController.REST_URL;
+
 @RestController
-@RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
 public class RestaurantController {
@@ -23,29 +28,13 @@ public class RestaurantController {
 
     @GetMapping
     public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
-        log.info("getAll for user {}", authUser.id());
+        log.info("getAll by {}", authUser.id());
         return service.getAllWithMenu();
     }
 
-    public Restaurant get(int id) {
-        //TODO
-        return null;
-    }
-
-    @PostMapping
-    void create() {
-        //TODO
-    }
-
-    @PutMapping
-    void update() {
-        //TODO
-    }
-
-    @DeleteMapping("{id}")
-    void delete(@PathVariable int id) {
-        log.info("delete restaurant {}", id);
-        service.delete(id);
+    @GetMapping("/{id}")
+    public Restaurant get(@PathVariable int id) {
+        log.info("get {}", id);
+        return service.get(id);
     }
 }
-

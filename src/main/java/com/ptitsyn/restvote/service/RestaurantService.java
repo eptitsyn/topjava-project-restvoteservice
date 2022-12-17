@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ptitsyn.restvote.util.Util.withTodaysMenu;
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.checkNew;
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.checkNotFoundWithId;
 
@@ -28,10 +29,6 @@ public class RestaurantService {
         checkNotFoundWithId(repository.delete(id), id);
     }
 
-    public List<Restaurant> getAllWithMenu() {
-        return repository.getAll();
-    }
-
     public void update(@NonNull Restaurant restaurant, int id) {
         checkNotFoundWithId(repository.save(restaurant), id);
     }
@@ -42,7 +39,7 @@ public class RestaurantService {
         return repository.save(restaurant);
     }
 
-    public List<Restaurant> getAll() {
-        return repository.getAll();
+    public List<Restaurant> getAllWithTodayMenu() {
+        return repository.findAll(withTodaysMenu());
     }
 }

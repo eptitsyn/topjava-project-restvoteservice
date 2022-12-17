@@ -7,9 +7,8 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class RestaurantTo extends NamedTo {
-    //TODO get rid of TO
 
-    private Menu todayMenu;
+    Menu todayMenu;
 
     public RestaurantTo(Integer id, String name, Menu todayMenu) {
         super(id, name);

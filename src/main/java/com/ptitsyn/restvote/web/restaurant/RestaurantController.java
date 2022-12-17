@@ -27,9 +27,9 @@ public class RestaurantController {
     RestaurantService service;
 
     @GetMapping
-    public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
+    public List<Restaurant> getAllRestaurantsWithTodayMenu(@AuthenticationPrincipal AuthUser authUser) {
         log.info("getAll by {}", authUser.id());
-        return service.getAllWithMenu();
+        return service.getAllWithTodayMenu();
     }
 
     @GetMapping("/{id}")

@@ -5,23 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serial;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "restaurant")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NamedEntityGraph(name = "graph.RestaurantWithTodayMenu", attributeNodes = {
+        @NamedAttributeNode("menus")
+})
 public class Restaurant extends NamedEntity {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    private Set<Menu> menus;
 
     public Restaurant(Integer id, String name) {
         super(id, name);
     }
 }
-

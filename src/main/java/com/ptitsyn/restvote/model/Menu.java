@@ -23,6 +23,7 @@ import java.util.LinkedList;
 @IdClass(Menu.RestaurantDatePK.class)
 @ToString(callSuper = true)
 public class Menu {
+    //TODO add enabled!!!
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -36,6 +37,7 @@ public class Menu {
     @Column(name = "date", nullable = false)
     @NotNull
     @Id
+    //TODO rename
     private LocalDate date;
 
     @Column(name = "dishes", nullable = false)

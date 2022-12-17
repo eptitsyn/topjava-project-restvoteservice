@@ -19,7 +19,7 @@ import java.util.LinkedList;
 @Table(name = "menu")
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @IdClass(Menu.RestaurantDatePK.class)
 @ToString(callSuper = true)
 public class Menu {

@@ -17,12 +17,14 @@ ALTER TABLE RESTAURANT
     ALTER COLUMN id RESTART WITH 4;
 
 INSERT INTO MENU (DATE, RESTAURANT_ID, DISHES)
-VALUES (CURRENT_DATE, 1, '{}'),
-       (CURRENT_DATE, 2, '{}'),
-       (CURRENT_DATE, 3, '{}'),
-       (DATEADD(DAY, 1, CURRENT_DATE), 1, '{}'),
-       (DATEADD(DAY, 1, CURRENT_DATE), 2, '{}'),
-       (DATEADD(DAY, 1, CURRENT_DATE), 3, '{}'),
-       (DATEADD(DAY, -1, CURRENT_DATE), 1, '{}'),
-       (DATEADD(DAY, -1, CURRENT_DATE), 2, '{}'),
-       (DATEADD(DAY, -1, CURRENT_DATE), 3, '{}');
+VALUES (CURRENT_DATE, 1, '[{"name":"Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
+       (CURRENT_DATE, 2, '[{"name":"Минестроне","price":12}]'),
+       (CURRENT_DATE, 3, '[{"name":"Паэлья","price":12}]'),
+       (DATEADD(DAY, 1, CURRENT_DATE), 1,
+        '[{"name":"Завтрашняя Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
+       (DATEADD(DAY, 1, CURRENT_DATE), 2, '[]'),
+       (DATEADD(DAY, 1, CURRENT_DATE), 3, '[]'),
+       (DATEADD(DAY, -1, CURRENT_DATE), 1,
+        '[{"name":"Вчерашняя Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
+       (DATEADD(DAY, -1, CURRENT_DATE), 2, '[]'),
+       (DATEADD(DAY, -1, CURRENT_DATE), 3, '[]');

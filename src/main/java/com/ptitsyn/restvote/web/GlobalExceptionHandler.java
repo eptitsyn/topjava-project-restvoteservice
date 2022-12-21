@@ -20,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return createResponseEntity(request, ex.getOptions(), null, ex.getStatus());
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> ResponseEntity<T> createResponseEntity(WebRequest request, ErrorAttributeOptions options, String msg, HttpStatus status) {
+        Map<String, Object> body = errorAttributes.getErrorAttributes(request, options);
+        if (msg != null) {
+            body.put("message", msg);
+        }
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
+        return (ResponseEntity<T>) ResponseEntity.status(status).body(body);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> entityNotFoundException(WebRequest request, EntityNotFoundException ex) {
         log.error("EntityNotFoundException: {}", ex.getMessage());
@@ -50,13 +62,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return createResponseEntity(request, ErrorAttributeOptions.of(MESSAGE), null, HttpStatus.CONFLICT);
     }
 
-    @NonNull
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
-            @NonNull Exception ex, Object body, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
-        log.error("Exception", ex);
-        super.handleExceptionInternal(ex, body, headers, status, request);
-        return createResponseEntity(request, ErrorAttributeOptions.of(), ValidationUtil.getRootCause(ex).getMessage(), status);
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> constraintViolationException(WebRequest request, ConstraintViolationException ex) {
+        log.error("ConstraintViolationException: {}", ex.getMessage());
+        String msg = ex.getConstraintViolations().stream()
+                .map(cv -> String.format("[%s] %s", cv.getPropertyPath(), cv.getMessage()))
+                .collect(Collectors.joining("\n"));
+        return createResponseEntity(request, ErrorAttributeOptions.of(), msg, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @NonNull
@@ -74,21 +86,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleBindingErrors(ex.getBindingResult(), request);
     }
 
+    @NonNull
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(
+            @NonNull Exception ex, Object body, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
+        log.error("Exception", ex);
+        super.handleExceptionInternal(ex, body, headers, status, request);
+        return createResponseEntity(request, ErrorAttributeOptions.of(), ValidationUtil.getRootCause(ex).getMessage(), status);
+    }
+
     private ResponseEntity<Object> handleBindingErrors(BindingResult result, WebRequest request) {
         String msg = result.getFieldErrors().stream()
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.joining("\n"));
         return createResponseEntity(request, ErrorAttributeOptions.defaults(), msg, HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> ResponseEntity<T> createResponseEntity(WebRequest request, ErrorAttributeOptions options, String msg, HttpStatus status) {
-        Map<String, Object> body = errorAttributes.getErrorAttributes(request, options);
-        if (msg != null) {
-            body.put("message", msg);
-        }
-        body.put("status", status.value());
-        body.put("error", status.getReasonPhrase());
-        return (ResponseEntity<T>) ResponseEntity.status(status).body(body);
     }
 }

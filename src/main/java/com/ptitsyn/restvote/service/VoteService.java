@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -18,15 +19,17 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class VoteService {
 
+    @NonNull
+    private final Clock clock = Clock.systemDefaultZone();
+
     @NonNull VoteRepository voteRepository;
     @NonNull RestaurantRepository restaurantRepository;
-
     @Value("${app.voteFinishTime}")
     @DateTimeFormat(pattern = "HH:mm")
     LocalTime voteFinishTime;
 
     public void vote(@NonNull User user, int restaurantId) {
-        vote(user, restaurantRepository.getReferenceById(restaurantId), LocalDate.now(), LocalTime.now());
+        vote(user, restaurantRepository.getReferenceById(restaurantId), LocalDate.now(clock), LocalTime.now(clock));
     }
 
     public void vote(User user, Restaurant restaurant, LocalDate localDate, LocalTime localTime) {

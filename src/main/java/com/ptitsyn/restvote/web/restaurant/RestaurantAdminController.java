@@ -2,16 +2,20 @@ package com.ptitsyn.restvote.web.restaurant;
 
 import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.service.RestaurantService;
+import com.ptitsyn.restvote.web.AuthUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.assureIdConsistent;
 
@@ -24,11 +28,31 @@ public class RestaurantAdminController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
-    RestaurantService service;
+    RestaurantService restaurantService;
+
+    @GetMapping
+    public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("Admin {} requested list of all restaurants", authUser.getUsername());
+        return restaurantService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public Restaurant getById(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("Admin {} requested restaurant with id {}", authUser.getUsername(), id);
+        return restaurantService.get(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("Admin {} deleting restaurant {}", authUser.getUsername(), id);
+        restaurantService.delete(id);
+    }
 
     @PostMapping
-    ResponseEntity<Restaurant> create(@RequestBody Restaurant restaurant) {
-        Restaurant created = service.create(restaurant);
+    ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("Admin {} creating {}", authUser.getUsername(), restaurant);
+        Restaurant created = restaurantService.create(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId())
@@ -38,16 +62,9 @@ public class RestaurantAdminController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update(@RequestBody Restaurant restaurant, @PathVariable int id) {
-        log.info("update {}", restaurant);
+    void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("Admin {} updating {}", authUser.getUsername(), restaurant);
         assureIdConsistent(restaurant, id);
-        service.update(restaurant, id);
-    }
-
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void delete(@PathVariable int id) {
-        log.info("delete {}", id);
-        service.delete(id);
+        restaurantService.update(restaurant);
     }
 }

@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ptitsyn.restvote.web.RestaurantTestData.RESTAURANT_MATCHER;
-import static com.ptitsyn.restvote.web.RestaurantTestData.restaurant1;
+import static com.ptitsyn.restvote.web.RestaurantTestData.*;
 import static com.ptitsyn.restvote.web.TestUtil.userHttpBasic;
 import static com.ptitsyn.restvote.web.user.UserTestData.admin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,14 +21,6 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Autowired
     private RestaurantService restaurantService;
 
-//    @Test
-//    void getAll() {
-//        perform(MockMvcRequestBuilders.get(REST_URL + RestaurantTestData.restaurant1.id()))
-//                .andExpect(status().isOk())
-//                .andDo(print())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(MEAL_MATCHER.contentJson(meal1));
-//    }
 
     @Test
     void get() throws Exception {
@@ -42,14 +33,9 @@ class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void create() {
-    }
-
-    @Test
-    void update() {
-    }
-
-    @Test
-    void delete() {
+    void getNonExistentRestaurant() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + NON_EXISTING_ID)
+                .with(userHttpBasic(admin)))
+                .andExpect(status().isNotFound());
     }
 }

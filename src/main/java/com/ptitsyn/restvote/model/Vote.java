@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vote", indexes = @Index(name = "uniqueVoteUserIdDate_idx", columnList = "user_id, date", unique = true))
+@Table(name = "vote")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,11 +20,11 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 public class Vote extends BaseEntity {
 
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @ToString.Exclude
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull
     private Restaurant restaurant;
 
     @NotNull
@@ -33,7 +35,9 @@ public class Vote extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "casted", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull
-    private LocalDate date;
+    @UniqueElements
+    private LocalDateTime casted;
 }

@@ -1,6 +1,7 @@
-package com.ptitsyn.restvote.web;
+package com.ptitsyn.restvote.web.restaurant;
 
 import com.ptitsyn.restvote.model.Restaurant;
+import com.ptitsyn.restvote.web.MatcherFactory;
 
 import java.util.List;
 

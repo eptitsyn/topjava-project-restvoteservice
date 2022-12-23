@@ -4,14 +4,12 @@ import com.ptitsyn.restvote.model.Menu;
 import com.ptitsyn.restvote.service.MenuService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,8 +27,5 @@ public class MenuController {
         return menuService.getAll(restaurantId);
     }
 
-    @GetMapping("/{date}")
-    public Menu get(@PathVariable int restaurantId, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return menuService.get(restaurantId, date);
-    }
+
 }

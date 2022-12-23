@@ -7,6 +7,7 @@ import lombok.NonNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,16 +24,20 @@ public class RestaurantService {
     }
 
     public void delete(int id) {
-        checkNotFoundWithId(repository.delete(id), id);
+        checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 
-    public void update(@NonNull Restaurant restaurant) {
+    public void update(@Valid @NonNull Restaurant restaurant) {
 //        checkNotFoundWithId(repository.save(restaurant), id);
 //        ValidationUtil.assureIdConsistent(restaurant, getById(restaurant.id()).orElseThrow().id());
 //        if (StringUtils.isEmpty(restaurant.getName())) {
 //            throw new IllegalRequestDataException("Restaurant name cannot be empty");
 //        }
-        checkModification(repository.update(restaurant.id(), restaurant.getName()), restaurant.getId());
+        try {
+            checkModification(repository.update(restaurant.id(), restaurant.getName()), restaurant.id());
+        } catch (DataIntegrityViolationException e) {
+            throw new DataConflictException("Data conflict", e);
+        }
     }
 
     public Restaurant create(Restaurant restaurant) {

@@ -11,8 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ptitsyn.restvote.web.RestaurantTestData.*;
 import static com.ptitsyn.restvote.web.TestUtil.userHttpBasic;
+import static com.ptitsyn.restvote.web.restaurant.RestaurantTestData.*;
 import static com.ptitsyn.restvote.web.user.UserTestData.admin;
 import static com.ptitsyn.restvote.web.user.UserTestData.user;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -83,6 +83,16 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void updateWithExistingName() throws Exception {
+        Restaurant updated = getUpdated();
+        updated.setName(restaurant3.getName());
+        perform(MockMvcRequestBuilders.put(REST_URL + updated.id()).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + restaurant1.id())
                 .with(userHttpBasic(admin)))
@@ -91,14 +101,14 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getFailAuth() throws Exception {
+    void getWithNoAuth() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + restaurant1.id()))
                 .andExpect(status().isUnauthorized())
                 .andDo(print());
     }
 
     @Test
-    void getTryUserAuth() throws Exception {
+    void getWirhUserAuth() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + restaurant1.id())
                 .with(userHttpBasic(user)))
                 .andExpect(status().isForbidden())

@@ -35,6 +35,6 @@ public class MenuService {
     }
 
     public void update(int restaurantId, LocalDate date) {
-        menuRepository.save(new Menu(restaurantRepository.get(restaurantId), date, new LinkedList<>(List.of(new Dish("asd", 12)))));
+        menuRepository.save(new Menu(restaurantRepository.getReferenceById(restaurantId), date, new LinkedList<>(List.of(new Dish("asd", 12)))));
     }
 }

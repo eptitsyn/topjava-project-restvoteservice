@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.ptitsyn.restvote.web.RestaurantTestData.*;
 import static com.ptitsyn.restvote.web.TestUtil.userHttpBasic;
+import static com.ptitsyn.restvote.web.restaurant.RestaurantTestData.*;
 import static com.ptitsyn.restvote.web.user.UserTestData.admin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

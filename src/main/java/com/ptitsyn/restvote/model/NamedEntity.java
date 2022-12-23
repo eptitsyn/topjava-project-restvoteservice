@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class NamedEntity extends BaseEntity {
 
-    @NotBlank
+    @NotBlank(message = "name is mandatory")
     @Size(min = 2, max = 128)
     @Column(name = "name", nullable = false, unique = true)
     @NoHtml

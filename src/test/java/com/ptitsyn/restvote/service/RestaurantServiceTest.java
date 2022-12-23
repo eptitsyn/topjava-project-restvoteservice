@@ -4,7 +4,7 @@ import com.ptitsyn.restvote.error.DataConflictException;
 import com.ptitsyn.restvote.error.IllegalRequestDataException;
 import com.ptitsyn.restvote.error.NotFoundException;
 import com.ptitsyn.restvote.model.Restaurant;
-import com.ptitsyn.restvote.web.RestaurantTestData;
+import com.ptitsyn.restvote.web.restaurant.RestaurantTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +14,8 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.getRootCause;
+import static com.ptitsyn.restvote.web.restaurant.RestaurantTestData.NON_EXISTING_ID;
+import static com.ptitsyn.restvote.web.restaurant.RestaurantTestData.restaurant3;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -76,23 +78,24 @@ class RestaurantServiceTest {
         Restaurant restaurant = RestaurantTestData.getNew();
         service.create(restaurant);
         Restaurant updated = RestaurantTestData.getUpdated();
+        updated.setName(restaurant3.getName());
         assertThrows(DataConflictException.class, () -> service.update(updated));
     }
 
 
     @Test
     void updateWithInvalidId() {
-        assertThrows(NotFoundException.class, () -> service.update(new Restaurant(999, "Updated Name")));
+        assertThrows(IllegalRequestDataException.class, () -> service.update(new Restaurant(NON_EXISTING_ID, "Updated Name")));
     }
 
     @Test
     void deleteWithInvalidId() {
-        assertThrows(NotFoundException.class, () -> service.delete(999));
+        assertThrows(NotFoundException.class, () -> service.delete(NON_EXISTING_ID));
     }
 
     @Test
     void getWithInvalidId() {
-        assertThrows(NotFoundException.class, () -> service.get(999));
+        assertThrows(NotFoundException.class, () -> service.get(NON_EXISTING_ID));
     }
 
     @Test

@@ -74,7 +74,8 @@ class RestaurantAdminControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Restaurant updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + updated.id()).contentType(MediaType.APPLICATION_JSON)
+        perform(MockMvcRequestBuilders.put(REST_URL + updated.id())
+                .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());

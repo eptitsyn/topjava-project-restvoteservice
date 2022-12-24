@@ -13,11 +13,10 @@ class VoteServiceTest {
     @Autowired
     private VoteService service;
 
-//    @Test
-//    void vote() {
-//        Vote vote = new Vote(restaurant1, user, LocalDate.of(2022, Month.FEBRUARY, 1));
-//        service.vote(vote, LocalDate.of(2022, Month.FEBRUARY, 1), LocalTime.of(10, 00));
-//    }
+    @Test
+    void vote() {
+
+    }
 
     @Test
     void voteChangeVote() {

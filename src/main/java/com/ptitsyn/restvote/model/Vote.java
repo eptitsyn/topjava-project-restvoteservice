@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -35,9 +34,9 @@ public class Vote extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+
     @Column(name = "casted", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull
-    @UniqueElements
     private LocalDateTime casted;
 }

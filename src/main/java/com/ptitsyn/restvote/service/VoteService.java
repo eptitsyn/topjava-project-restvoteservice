@@ -1,5 +1,7 @@
 package com.ptitsyn.restvote.service;
 
+import com.ptitsyn.restvote.model.User;
+import com.ptitsyn.restvote.model.Vote;
 import com.ptitsyn.restvote.repository.RestaurantRepository;
 import com.ptitsyn.restvote.repository.VoteRepository;
 import lombok.NonNull;
@@ -9,6 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Service
@@ -22,28 +26,16 @@ public class VoteService {
     LocalTime voteFinishTime;
     private Clock clock = Clock.systemDefaultZone();
 
-//    public void vote(@NonNull User user, int restaurantId) {
-//        vote(user, restaurantRepository.getReferenceById(restaurantId), LocalDateTime.now(clock));
-//    }
-//
-//    public void vote(User user, Restaurant restaurant, LocalDateTime localDateTime) {
-//        if (localDateTime.toLocalTime().isAfter(voteFinishTime)) {
-//            throw new IllegalStateException("Voting is closed. Finish time: " + voteFinishTime);
-//        }
-//        Vote newVote = voteRepository.findByUserAndCastedDate(user, localDateTime.toLocalDate());
-//        if (newVote == null) {
-//            newVote = new Vote(restaurant, user, localDateTime);
-//        } else {
-//            newVote.setRestaurant(restaurant);
-//        }
-//        voteRepository.save(newVote);
-//    }
+    public Vote get(User user) {
+        return get(user, LocalDate.now());
+    }
 
-//    public Vote get(User user) {
-//        return get(user, LocalDate.now());
-//    }
-//
-//    public Vote get(User user, LocalDate date) {
-//        return voteRepository.findByUserAndCastedDate(user, date);
-//    }
+    public Vote get(User user, LocalDate date) {
+        return voteRepository.findFirstByUser_IdAndCastedBetweenOrderByCastedDesc(user.id(), date.atStartOfDay(),
+                date.plusDays(1).atStartOfDay());
+    }
+
+    public void vote(User user, Integer restaurantId) {
+        voteRepository.save(new Vote(restaurantRepository.getReferenceById(restaurantId), user, LocalDateTime.now()));
+    }
 }

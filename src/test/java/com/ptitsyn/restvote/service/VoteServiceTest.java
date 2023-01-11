@@ -1,22 +1,19 @@
 package com.ptitsyn.restvote.service;
 
+import com.ptitsyn.restvote.to.VoteCountTo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 @SpringBootTest
 class VoteServiceTest {
 
     @Autowired
     private VoteService service;
-
-    @Test
-    void vote() {
-
-    }
 
     @Test
     void voteChangeVote() {
@@ -28,4 +25,11 @@ class VoteServiceTest {
 //        Assert.isTrue(restaurant2.equals(vote.getRestaurant()), "Not Same Vote");
     }
 
+    @Test
+    void countVotes() {
+        List<VoteCountTo> result = service.getResults(LocalDate.now());
+        for (VoteCountTo vote : result) {
+            System.out.println(vote.getRestaurant() + " : " + vote.getVoteCount());
+        }
+    }
 }

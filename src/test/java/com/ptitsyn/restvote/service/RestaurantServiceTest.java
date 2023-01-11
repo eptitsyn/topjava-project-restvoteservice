@@ -1,6 +1,7 @@
 package com.ptitsyn.restvote.service;
 
 import com.ptitsyn.restvote.error.DataConflictException;
+import com.ptitsyn.restvote.error.ErrorConstants;
 import com.ptitsyn.restvote.error.IllegalRequestDataException;
 import com.ptitsyn.restvote.error.NotFoundException;
 import com.ptitsyn.restvote.model.Restaurant;
@@ -68,9 +69,10 @@ class RestaurantServiceTest {
     void updateWithEmptyName() {
         Restaurant updated = RestaurantTestData.getUpdated();
         updated.setName("");
-        ConstraintViolationException ex = assertThrows(ConstraintViolationException.class, () -> service.update(updated));
-//        assertThat(ex.getConstraintViolations().size()).isEqualTo(1);
-//        assertThat(ex.getConstraintViolations().iterator().next().getMessage()).isEqualTo("must not be blank");
+        ConstraintViolationException ex = assertThrows(ConstraintViolationException.class,
+                () -> service.update(updated));
+        assertThat(ex.getConstraintViolations().size()).isEqualTo(2);
+        assertThat(ex.getConstraintViolations().stream().anyMatch((e) -> e.getMessage().equals(ErrorConstants.NAME_IS_MANDATORY))).isTrue();
     }
 
     @Test
@@ -85,7 +87,8 @@ class RestaurantServiceTest {
 
     @Test
     void updateWithInvalidId() {
-        assertThrows(IllegalRequestDataException.class, () -> service.update(new Restaurant(NON_EXISTING_ID, "Updated Name")));
+        assertThrows(NotFoundException.class, () -> service.update(new Restaurant(NON_EXISTING_ID, "Updated" +
+                " Name")));
     }
 
     @Test

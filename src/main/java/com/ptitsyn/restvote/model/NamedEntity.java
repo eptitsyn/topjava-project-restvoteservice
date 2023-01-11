@@ -1,5 +1,6 @@
 package com.ptitsyn.restvote.model;
 
+import com.ptitsyn.restvote.error.ErrorConstants;
 import com.ptitsyn.restvote.util.validation.NoHtml;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class NamedEntity extends BaseEntity {
 
-    @NotBlank(message = "name is mandatory")
+    @NotBlank(message = ErrorConstants.NAME_IS_MANDATORY)
     @Size(min = 2, max = 128)
     @Column(name = "name", nullable = false, unique = true)
     @NoHtml

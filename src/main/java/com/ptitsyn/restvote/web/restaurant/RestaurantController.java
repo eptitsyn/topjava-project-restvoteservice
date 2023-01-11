@@ -24,7 +24,7 @@ public class RestaurantController {
     static final String REST_URL = "/api/restaurants";
 
     private final RestaurantService service;
-
+    
     @GetMapping
     public List<Restaurant> getAllWithMenuForToday(@AuthenticationPrincipal AuthUser authUser) {
         log.info("User {} requested restaurant list with menu for today", authUser.getUsername());

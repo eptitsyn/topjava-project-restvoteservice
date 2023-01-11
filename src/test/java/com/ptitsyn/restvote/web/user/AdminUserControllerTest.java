@@ -106,7 +106,8 @@ class AdminUserControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        UserTestData.USER_MATCHER.assertMatch(userRepository.getExisted(UserTestData.USER_ID), UserTestData.getUpdated());
+        UserTestData.USER_MATCHER.assertMatch(userRepository.getExisted(UserTestData.USER_ID),
+                UserTestData.getUpdated());
     }
 
     @Test
@@ -131,7 +132,8 @@ class AdminUserControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.admin, UserTestData.guest, UserTestData.user));
+                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.admin, UserTestData.guest,
+                        UserTestData.user));
     }
 
     @Test
@@ -144,16 +146,6 @@ class AdminUserControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         assertFalse(userRepository.getExisted(UserTestData.USER_ID).isEnabled());
-    }
-
-    @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
-    void getWithMeals() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + UserTestData.ADMIN_ID + "/with-meals"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_WITH_MEALS_MATCHER.contentJson(UserTestData.admin));
     }
 
     @Test

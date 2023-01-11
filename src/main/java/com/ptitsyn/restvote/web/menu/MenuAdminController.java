@@ -1,9 +1,7 @@
 package com.ptitsyn.restvote.web.menu;
 
-import com.ptitsyn.restvote.model.Dish;
 import com.ptitsyn.restvote.model.Menu;
 import com.ptitsyn.restvote.service.MenuService;
-import com.ptitsyn.restvote.util.convertor.HashMapConverter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,11 +11,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 
 @RestController
-@RequestMapping(value = com.ptitsyn.restvote.web.menu.MenuAdminController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = com.ptitsyn.restvote.web.menu.MenuAdminController.REST_URL, produces =
+        MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
 @Secured("ROLE_ADMIN")
@@ -28,17 +25,17 @@ public class MenuAdminController {
     MenuService menuService;
 
     @GetMapping("/{date}")
-    public Menu get(@PathVariable int restaurantId, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public Menu get(@PathVariable int restaurantId,
+                    @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return menuService.get(restaurantId, date);
     }
 
     @PutMapping("/{date}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update(@PathVariable int restaurantId, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    void update(@PathVariable int restaurantId,
+                @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("update {} menu at date {}", restaurantId, date);
-        HashMapConverter hm = new HashMapConverter();
-        log.error(hm.convertToDatabaseColumn(new LinkedList<>(List.of(new Dish("asd", 12)))));
-        //assureIdConsistent(restaurant, id);
+        //assureIdConsistent(restaurantId, id);
         menuService.update(restaurantId, date);
     }
 }

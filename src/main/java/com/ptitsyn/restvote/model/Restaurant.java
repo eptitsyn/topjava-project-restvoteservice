@@ -9,7 +9,8 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(name = "UniqueNumberAndStatus", columnNames = {"name"})})
+@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(name = "UniqueNumberAndStatus", columnNames = {
+        "name"})})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

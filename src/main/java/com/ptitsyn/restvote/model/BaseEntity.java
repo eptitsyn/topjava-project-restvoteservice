@@ -35,7 +35,12 @@ public abstract class BaseEntity implements Persistable<Integer>, HasId {
         return id == null;
     }
 
-    //    https://stackoverflow.com/questions/1638723
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
+    }
+
+    //    //    https://stackoverflow.com/questions/1638723
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -46,11 +51,6 @@ public abstract class BaseEntity implements Persistable<Integer>, HasId {
         }
         BaseEntity that = (BaseEntity) o;
         return id != null && id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id == null ? 0 : id;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ptitsyn.restvote.web.vote;
 
 import com.ptitsyn.restvote.model.Vote;
 import com.ptitsyn.restvote.service.VoteService;
+import com.ptitsyn.restvote.to.VoteTo;
 import com.ptitsyn.restvote.util.JsonUtil;
 import com.ptitsyn.restvote.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -50,9 +51,9 @@ class VoteControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
-                .content(JsonUtil.writeValue(VoteTestData.vote1)))
-                .andExpect(status().isAccepted());
+                .content(JsonUtil.writeValue(new VoteTo(VoteTestData.vote1.getRestaurant().id()))))
+                .andExpect(status().isCreated());
 
-//        VOTE_MATCHER.assertMatch(restaurantService.get(updated.id()), updated);
+//        VOTE_MATCHER.assertMatch(voteService.get(updated.id()), updated);
     }
 }

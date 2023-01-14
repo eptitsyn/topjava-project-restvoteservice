@@ -5,6 +5,7 @@ import com.ptitsyn.restvote.model.Menu;
 import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.repository.MenuRepository;
 import com.ptitsyn.restvote.repository.RestaurantRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,7 +35,10 @@ public class MenuService {
         return menuRepository.findByRestaurantOrderByDateAsc(restaurant);
     }
 
+    @CacheEvict(value = "menu", allEntries = true)
     public void update(int restaurantId, LocalDate date) {
-        menuRepository.save(new Menu(restaurantRepository.getReferenceById(restaurantId), date, new LinkedList<>(List.of(new Dish("asd", 12)))));
+        //todo
+        menuRepository.save(new Menu(restaurantRepository.getReferenceById(restaurantId), date,
+                new LinkedList<>(List.of(new Dish("asd", 12)))));
     }
 }

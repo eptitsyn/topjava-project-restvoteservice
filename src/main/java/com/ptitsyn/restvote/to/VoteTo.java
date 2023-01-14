@@ -6,9 +6,13 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class VoteTo {
+public class VoteTo extends BaseTo {
 
     @NonNull
     private Integer restaurantId;
-    
+
+    public VoteTo(@NonNull Integer id, @NonNull Integer restaurantId) {
+        super(id);
+        this.restaurantId = restaurantId;
+    }
 }

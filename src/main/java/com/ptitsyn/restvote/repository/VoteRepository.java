@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Transactional
+@Transactional(readOnly = true)
 public interface VoteRepository extends BaseRepository<Vote> {
 
     Vote findFirstByUser_IdAndCastedBetweenOrderByCastedDesc(@NonNull Integer id, @NonNull LocalDateTime castedStart,
@@ -30,8 +30,7 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @EntityGraph(attributePaths = {"restaurant", "user"})
     @Query("SELECT v FROM Vote v " +
             "WHERE v.id = (" +
-            "SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate " +
-            "GROUP BY vv.restaurant)")
+            "SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)")
     Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);
 
@@ -45,4 +44,8 @@ public interface VoteRepository extends BaseRepository<Vote> {
             "GROUP BY v.restaurant ORDER BY voteCount DESC")
     List<VoteCountTo> findAllResultByLastVote(@Param("startDate") LocalDateTime startDate,
                                               @Param("endDate") LocalDateTime endDate);
+
+    @NonNull
+    @EntityGraph(attributePaths = {"restaurant"})
+    Vote save(@NonNull Vote vote);
 }

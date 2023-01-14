@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
+@Transactional(readOnly = true)
 public interface RestaurantRepository extends BaseRepository<Restaurant> {
 
     //@EntityGraph(attributePaths = {"menus"}, type = EntityGraph.EntityGraphType.LOAD)

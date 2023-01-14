@@ -28,9 +28,9 @@ class AdminUserControllerTest extends AbstractControllerTest {
     private UserRepository userRepository;
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + UserTestData.ADMIN_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL + 2))
                 .andExpect(status().isOk())
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
@@ -39,7 +39,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + UserTestData.NOT_FOUND))
                 .andDo(print())
@@ -47,7 +47,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void getByEmail() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "by-email?email=" + UserTestData.admin.getEmail()))
                 .andExpect(status().isOk())
@@ -56,16 +56,16 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + UserTestData.USER_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL + 1))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertFalse(userRepository.findById(UserTestData.USER_ID).isPresent());
+        assertFalse(userRepository.findById(1).isPresent());
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void deleteNotFound() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + UserTestData.NOT_FOUND))
                 .andDo(print())
@@ -73,7 +73,7 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void enableNotFound() throws Exception {
         perform(MockMvcRequestBuilders.patch(REST_URL + UserTestData.NOT_FOUND)
                 .param("enabled", "false")
@@ -89,29 +89,29 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
+    @WithUserDetails(value = "user@yandex.ru")
     void getForbidden() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void update() throws Exception {
         User updated = UserTestData.getUpdated();
         updated.setId(null);
-        perform(MockMvcRequestBuilders.put(REST_URL + UserTestData.USER_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(UserTestData.jsonWithPassword(updated, "newPass")))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        UserTestData.USER_MATCHER.assertMatch(userRepository.getExisted(UserTestData.USER_ID),
+        UserTestData.USER_MATCHER.assertMatch(userRepository.getExisted(1),
                 UserTestData.getUpdated());
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void createWithLocation() throws Exception {
         User newUser = UserTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -127,29 +127,28 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.admin, UserTestData.guest,
-                        UserTestData.user));
+                .andExpect(UserTestData.USER_MATCHER.contentJson(UserTestData.usersSorted));
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void enable() throws Exception {
-        perform(MockMvcRequestBuilders.patch(REST_URL + UserTestData.USER_ID)
+        perform(MockMvcRequestBuilders.patch(REST_URL + 1)
                 .param("enabled", "false")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        assertFalse(userRepository.getExisted(UserTestData.USER_ID).isEnabled());
+        assertFalse(userRepository.getExisted(1).isEnabled());
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void createInvalid() throws Exception {
         User invalid = new User(null, null, "", "newPass", Role.USER, Role.ADMIN);
         perform(MockMvcRequestBuilders.post(REST_URL)
@@ -160,11 +159,11 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void updateInvalid() throws Exception {
         User invalid = new User(UserTestData.user);
         invalid.setName("");
-        perform(MockMvcRequestBuilders.put(REST_URL + UserTestData.USER_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(UserTestData.jsonWithPassword(invalid, "password")))
                 .andDo(print())
@@ -172,11 +171,11 @@ class AdminUserControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void updateHtmlUnsafe() throws Exception {
         User updated = new User(UserTestData.user);
         updated.setName("<script>alert(123)</script>");
-        perform(MockMvcRequestBuilders.put(REST_URL + UserTestData.USER_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(UserTestData.jsonWithPassword(updated, "password")))
                 .andDo(print())
@@ -185,11 +184,11 @@ class AdminUserControllerTest extends AbstractControllerTest {
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void updateDuplicate() throws Exception {
         User updated = new User(UserTestData.user);
-        updated.setEmail(UserTestData.ADMIN_MAIL);
-        perform(MockMvcRequestBuilders.put(REST_URL + UserTestData.USER_ID)
+        updated.setEmail("admin@gmail.com");
+        perform(MockMvcRequestBuilders.put(REST_URL + 1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(UserTestData.jsonWithPassword(updated, "password")))
                 .andDo(print())
@@ -199,9 +198,9 @@ class AdminUserControllerTest extends AbstractControllerTest {
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
-    @WithUserDetails(value = UserTestData.ADMIN_MAIL)
+    @WithUserDetails(value = "admin@gmail.com")
     void createDuplicate() throws Exception {
-        User expected = new User(null, "New", UserTestData.USER_MAIL, "newPass", Role.USER, Role.ADMIN);
+        User expected = new User(null, "New", "user@yandex.ru", "newPass", Role.USER, Role.ADMIN);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(UserTestData.jsonWithPassword(expected, "newPass")))

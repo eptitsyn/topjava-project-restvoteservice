@@ -17,15 +17,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Vote extends BaseEntity {
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 

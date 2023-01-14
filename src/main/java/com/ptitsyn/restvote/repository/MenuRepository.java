@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-@Transactional
+@Transactional(readOnly = true)
 public interface MenuRepository extends BaseRepository<Menu> {
     List<Menu> findByRestaurantOrderByDateAsc(@NonNull Restaurant restaurant);
 

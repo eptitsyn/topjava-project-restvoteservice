@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -30,6 +31,7 @@ public class VoteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Transactional
     public ResponseEntity<Vote> castUserVote(@AuthenticationPrincipal AuthUser authUser,
                                              @Valid @RequestBody VoteTo voteTo) {
         int restaurantId = voteTo.getRestaurantId();
@@ -38,6 +40,7 @@ public class VoteController {
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(vote.getId()).toUri();
+        System.out.println(vote.getRestaurant());
         return ResponseEntity.created(uriOfNewResource).body(vote);
     }
 

@@ -24,13 +24,14 @@ import java.util.List;
 public class VoteService {
 
     private final UserRepository userRepository;
+
+    //todo pass clock at constructor for testing
+    private final Clock clock = Clock.systemDefaultZone();
     @NonNull VoteRepository voteRepository;
     @NonNull RestaurantRepository restaurantRepository;
     @Value("${app.voteFinishTime}")
     @DateTimeFormat(pattern = "HH:mm")
     LocalTime voteFinishTime;
-
-    private Clock clock = Clock.systemDefaultZone();
 
     public Vote get(User user) {
         return get(user, LocalDate.now());
@@ -45,9 +46,10 @@ public class VoteService {
         if (LocalTime.now(clock).isAfter(voteFinishTime)) {
             throw new VotingClosedException("Voting is closed at " + voteFinishTime.toString());
         }
-        Vote vote = new Vote(restaurantRepository.getReferenceById(restaurantId),
-                userRepository.getReferenceById(user.id()), LocalDateTime.now(clock));
-        return voteRepository.save(vote);
+        Vote saved = voteRepository.save(new Vote(restaurantRepository.getReferenceById(restaurantId),
+                userRepository.getReferenceById(user.id()), LocalDateTime.now(clock)));
+        System.out.println(saved);
+        return saved;
     }
 
     public Vote findLastVoteForUserForDate(User user, LocalDate date) {

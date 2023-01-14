@@ -26,7 +26,7 @@ class ProfileControllerTest extends AbstractControllerTest {
     private UserRepository userRepository;
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
+    @WithUserDetails(value = "user@yandex.ru")
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
@@ -41,11 +41,12 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
+    @WithUserDetails(value = "user@yandex.ru")
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL))
                 .andExpect(status().isNoContent());
-        UserTestData.USER_MATCHER.assertMatch(userRepository.findAll(), UserTestData.admin, UserTestData.guest);
+        UserTestData.USER_MATCHER.assertMatch(userRepository.findAll(), UserTestData.admin,
+                UserTestData.user2, UserTestData.user3);
     }
 
     @Test
@@ -66,15 +67,16 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
+    @WithUserDetails(value = "user@yandex.ru")
     void update() throws Exception {
-        UserTo updatedTo = new UserTo(null, "newName", UserTestData.USER_MAIL, "newPassword");
+        UserTo updatedTo = new UserTo(null, "newName", "user@yandex.ru", "newPassword");
         perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        UserTestData.USER_MATCHER.assertMatch(userRepository.getExisted(UserTestData.USER_ID), UserUtil.updateFromTo(new User(UserTestData.user), updatedTo));
+        UserTestData.USER_MATCHER.assertMatch(userRepository.getExisted(1),
+                UserUtil.updateFromTo(new User(UserTestData.user), updatedTo));
     }
 
     @Test
@@ -88,7 +90,7 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
+    @WithUserDetails(value = "user@yandex.ru")
     void updateInvalid() throws Exception {
         UserTo updatedTo = new UserTo(null, null, "password", null);
         perform(MockMvcRequestBuilders.put(REST_URL)
@@ -99,9 +101,9 @@ class ProfileControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    @WithUserDetails(value = UserTestData.USER_MAIL)
+    @WithUserDetails(value = "user@yandex.ru")
     void updateDuplicate() throws Exception {
-        UserTo updatedTo = new UserTo(null, "newName", UserTestData.ADMIN_MAIL, "newPassword");
+        UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
         perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())

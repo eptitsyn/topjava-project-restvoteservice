@@ -64,4 +64,4 @@ server.servlet:
 server:
   port: 8081
 app:
-  voteFinishTime: "23:00" #todo revert do default 11:00
+  voteFinishTime: "23:59" #todo revert do default 11:00

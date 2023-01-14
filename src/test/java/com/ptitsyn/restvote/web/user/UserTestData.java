@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class UserTestData {
 
     public static final MatcherFactory.Matcher<User> USER_MATCHER =
@@ -22,15 +20,6 @@ public class UserTestData {
     public static final User user3 = new User(4, "User3", "user3@gmail.com", "user");
     public static final List<User> users = List.of(user, admin, user2, user3);
     public static final List<User> usersSorted = List.of(admin, user, user2, user3);
-
-    public static MatcherFactory.Matcher<User> USER_WITH_MEALS_MATCHER =
-            MatcherFactory.usingAssertions(User.class,
-                    //     No need use ignoringAllOverriddenEquals, see https://assertj.github.io/doc/#breaking-changes
-                    (a, e) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("registered", "meals.user", "password").isEqualTo(e),
-                    (a, e) -> {
-                        throw new UnsupportedOperationException();
-                    });
 
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER));

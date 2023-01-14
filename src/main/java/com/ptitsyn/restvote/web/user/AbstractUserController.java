@@ -19,11 +19,6 @@ public abstract class AbstractUserController {
     @Autowired
     private UniqueMailValidator emailValidator;
 
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(emailValidator);
-    }
-
     public ResponseEntity<User> get(int id) {
         log.info("get {}", id);
         return ResponseEntity.of(repository.findById(id));
@@ -35,9 +30,9 @@ public abstract class AbstractUserController {
         repository.deleteExisted(id);
     }
 
-    public ResponseEntity<User> getWithMeals(int id) {
-        log.info("getWithMeals {}", id);
-        return ResponseEntity.of(repository.getWithMeals(id));
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(emailValidator);
     }
 
     protected User prepareAndSave(User user) {

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> ResponseEntity<T> createResponseEntity(WebRequest request, ErrorAttributeOptions options, String msg, HttpStatus status) {
+    private <T> ResponseEntity<T> createResponseEntity(WebRequest request, ErrorAttributeOptions options, String msg,
+                                                       HttpStatus status) {
         Map<String, Object> body = errorAttributes.getErrorAttributes(request, options);
         if (msg != null) {
             body.put("message", msg);
@@ -62,13 +64,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return createResponseEntity(request, ErrorAttributeOptions.of(MESSAGE), null, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<?> constraintViolationException(WebRequest request, ConstraintViolationException ex) {
         log.error("ConstraintViolationException: {}", ex.getMessage());
         String msg = ex.getConstraintViolations().stream()
                 .map(cv -> String.format("[%s] %s", cv.getPropertyPath(), cv.getMessage()))
                 .collect(Collectors.joining("\n"));
         return createResponseEntity(request, ErrorAttributeOptions.of(), msg, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> dataIntegrityViolationException(WebRequest request, DataIntegrityViolationException ex) {
+        log.error("ConstraintViolationException: {}", ex.getMessage());
+        return createResponseEntity(request, ErrorAttributeOptions.of(), null, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @NonNull
@@ -89,10 +97,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @NonNull
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
-            @NonNull Exception ex, Object body, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
+            @NonNull Exception ex, Object body, @NonNull HttpHeaders headers, @NonNull HttpStatus status,
+            @NonNull WebRequest request) {
         log.error("Exception", ex);
         super.handleExceptionInternal(ex, body, headers, status, request);
-        return createResponseEntity(request, ErrorAttributeOptions.of(), ValidationUtil.getRootCause(ex).getMessage(), status);
+        return createResponseEntity(request, ErrorAttributeOptions.of(), ValidationUtil.getRootCause(ex).getMessage()
+                , status);
     }
 
     private ResponseEntity<Object> handleBindingErrors(BindingResult result, WebRequest request) {

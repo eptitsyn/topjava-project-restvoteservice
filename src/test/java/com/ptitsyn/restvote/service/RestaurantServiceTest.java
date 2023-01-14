@@ -51,7 +51,7 @@ class RestaurantServiceTest {
     @Test
     void create() {
         Restaurant created = service.create(RestaurantTestData.getNew());
-        Restaurant found = service.get(created.getId());
+        Restaurant found = service.get(created.id());
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(found, created);
     }
 
@@ -61,7 +61,7 @@ class RestaurantServiceTest {
         Restaurant updated = RestaurantTestData.getUpdated();
         updated.setId(created.getId());
         service.update(updated);
-        Restaurant found = service.get(created.getId());
+        Restaurant found = service.get(created.id());
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(found, updated);
     }
 
@@ -104,14 +104,14 @@ class RestaurantServiceTest {
     @Test
     void delete() {
         Restaurant created = service.create(RestaurantTestData.getNew());
-        service.delete(created.getId());
-        assertThrows(NotFoundException.class, () -> service.get(created.getId()));
+        service.delete(created.id());
+        assertThrows(NotFoundException.class, () -> service.get(created.id()));
     }
 
     @Test
     void get() {
         Restaurant created = service.create(RestaurantTestData.getNew());
-        Restaurant found = service.get(created.getId());
+        Restaurant found = service.get(created.id());
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(found, created);
     }
 

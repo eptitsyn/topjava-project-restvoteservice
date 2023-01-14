@@ -1,5 +1,6 @@
 package com.ptitsyn.restvote.service;
 
+import com.ptitsyn.restvote.error.VotingClosedException;
 import com.ptitsyn.restvote.model.User;
 import com.ptitsyn.restvote.model.Vote;
 import com.ptitsyn.restvote.repository.RestaurantRepository;
@@ -28,6 +29,7 @@ public class VoteService {
     @Value("${app.voteFinishTime}")
     @DateTimeFormat(pattern = "HH:mm")
     LocalTime voteFinishTime;
+
     private Clock clock = Clock.systemDefaultZone();
 
     public Vote get(User user) {
@@ -39,9 +41,12 @@ public class VoteService {
                 date.plusDays(1).atStartOfDay());
     }
 
-    public Vote create(int restaurantId, User user) {
+    public Vote create(int restaurantId, User user) throws VotingClosedException {
+        if (LocalTime.now(clock).isAfter(voteFinishTime)) {
+            throw new VotingClosedException("Voting is closed at " + voteFinishTime.toString());
+        }
         Vote vote = new Vote(restaurantRepository.getReferenceById(restaurantId),
-                userRepository.getReferenceById(user.id()), LocalDateTime.now());
+                userRepository.getReferenceById(user.id()), LocalDateTime.now(clock));
         return voteRepository.save(vote);
     }
 

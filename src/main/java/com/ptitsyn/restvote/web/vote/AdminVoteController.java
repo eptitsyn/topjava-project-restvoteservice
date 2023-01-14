@@ -2,6 +2,7 @@ package com.ptitsyn.restvote.web.vote;
 
 import com.ptitsyn.restvote.model.Vote;
 import com.ptitsyn.restvote.repository.VoteRepository;
+import com.ptitsyn.restvote.to.VoteCountTo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,8 +31,14 @@ public class AdminVoteController {
         return voteRepository.findAll();
     }
 
-    @GetMapping("{date}/results")
+    @GetMapping("{date}/last-votes")
     public List<Vote> getLastVotesAllUsersByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return voteRepository.findLastVotesForDate(date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+    }
+
+    @GetMapping("{date}/results")
+    public List<VoteCountTo> getResultsByDate(@PathVariable @DateTimeFormat(iso =
+            DateTimeFormat.ISO.DATE) LocalDate date) {
+        return voteRepository.findAllResultByLastVote(date.atStartOfDay(), date.plusDays(1).atStartOfDay());
     }
 }

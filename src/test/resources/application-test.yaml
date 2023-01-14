@@ -1,1 +1,6 @@
 spring.cache.type: none
+spring:
+  jpa:
+    show-sql: true
+#  datasource:
+#    url: jdbc:h2:~/Documents/dev/java-ops/project-restvote/db/topjava

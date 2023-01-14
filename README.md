@@ -2,7 +2,8 @@
 
 [App on heroku](https://eptitsyn-topjava.herokuapp.com/)
 
-##  Technical requirement:
+## Technical requirement:
+
 Design and implement a REST API using Hibernate/Spring/SpringMVC (Spring-Boot preferred!) **without frontend**.
 
 The task is:
@@ -20,12 +21,26 @@ Build a voting system for deciding where to have lunch.
 
 Each restaurant provides a new menu each day.
 
-As a result, provide a link to GitHub repository. It should contain the code, README.md with API documentation and couple curl commands to test it (**better - link to Swagger**).
+As a result, provide a link to GitHub repository. It should contain the code, README.md with API documentation and
+couple curl commands to test it (**better - link to Swagger**).
 
-[REST API documentation](https://eptitsyn.stoplight.io/docs/restvote/) 
+[REST API documentation](https://eptitsyn.stoplight.io/docs/restvote/)
 Данные для доступа:
+
 ```
 Admin: admin@gmail.com / admin
 User:  user@yandex.ru / password
 Guest: guest@gmail.com / guest
 ```
+
+### Main hadlers
+
+Restaurant list with today's menu: ```/api/restaurants```
+
+Vote: ```/api/votes```
+
+Vote Results ```/api/admin/votes/{date}/results```
+
+### Other handlers
+
+//TBD

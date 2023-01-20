@@ -14,6 +14,7 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface MenuRepository extends BaseRepository<Menu> {
+    void deleteByRestaurantAndDate(@NonNull Restaurant restaurant, @NonNull LocalDate date);
 
     @Transactional
     @Modifying

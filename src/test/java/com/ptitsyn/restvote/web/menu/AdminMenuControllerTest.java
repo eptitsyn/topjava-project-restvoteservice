@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class MenuAdminControllerTest extends AbstractControllerTest {
+class AdminMenuControllerTest extends AbstractControllerTest {
 
-    public static final String REST_URL = MenuAdminController.REST_URL + '/';
+    public static final String REST_URL = AdminMenuController.REST_URL + '/';
 
     @Autowired
     private MenuService menuService;

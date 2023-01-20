@@ -52,4 +52,8 @@ public class MenuService {
         menuRepository.save(new Menu(restaurantRepository.getReferenceById(restaurantId), date,
                 new LinkedList<>(List.of(new Dish("asd", 12)))));
     }
+
+    public void delete(int restaurantId, LocalDate date) {
+        menuRepository.deleteByRestaurantAndDate(restaurantRepository.getReferenceById(restaurantId), date);
+    }
 }

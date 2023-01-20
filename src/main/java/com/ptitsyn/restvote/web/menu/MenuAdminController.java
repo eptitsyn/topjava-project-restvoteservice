@@ -33,9 +33,9 @@ public class MenuAdminController {
     @PutMapping("/{date}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void update(@PathVariable int restaurantId,
-                @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+                @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestBody Menu menu) {
         log.info("update {} menu at date {}", restaurantId, date);
-        menuService.update(restaurantId, date);
+        menuService.update(restaurantId, date, menu);
     }
 
 }

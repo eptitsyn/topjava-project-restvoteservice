@@ -35,7 +35,7 @@ public class MenuAdminController {
     void update(@PathVariable int restaurantId,
                 @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("update {} menu at date {}", restaurantId, date);
-        //assureIdConsistent(restaurantId, id);
         menuService.update(restaurantId, date);
     }
+
 }

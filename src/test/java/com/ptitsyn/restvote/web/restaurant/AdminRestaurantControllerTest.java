@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class RestaurantAdminControllerTest extends AbstractControllerTest {
+class AdminRestaurantControllerTest extends AbstractControllerTest {
 
-    public static final String REST_URL = RestaurantAdminController.REST_URL + '/';
+    public static final String REST_URL = AdminRestaurantController.REST_URL + '/';
 
     @Autowired
     private RestaurantService restaurantService;

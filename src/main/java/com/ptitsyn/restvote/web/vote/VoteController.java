@@ -6,7 +6,6 @@ import com.ptitsyn.restvote.to.VoteTo;
 import com.ptitsyn.restvote.web.AuthUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -30,7 +29,6 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
     @Transactional
     public ResponseEntity<Vote> castUserVote(@AuthenticationPrincipal AuthUser authUser,
                                              @Valid @RequestBody VoteTo voteTo) {

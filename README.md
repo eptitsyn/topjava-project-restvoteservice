@@ -1,6 +1,8 @@
-# App
+# Restautant Voting App
 
-[App on heroku](https://eptitsyn-topjava.herokuapp.com/)
+[//]: # ()
+
+[//]: # ([App on heroku]&#40;https://eptitsyn-topjava.herokuapp.com/&#41;)
 
 ## Technical requirement:
 
@@ -41,6 +43,8 @@ Vote: ```/api/votes```
 
 Vote Results ```/api/admin/votes/{date}/results```
 
-### Other handlers
+[//]: # (### Other handlers)
 
-//TBD
+[//]: # ()
+
+[//]: # (//TBD)

@@ -15,6 +15,7 @@ import java.util.LinkedList;
 
 @Entity
 @Table(name = "menu")
+@Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -29,7 +30,6 @@ public class Menu {
     @ToString.Exclude
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Id
-    //TODO remove
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)

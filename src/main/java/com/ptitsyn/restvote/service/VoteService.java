@@ -50,7 +50,6 @@ public class VoteService {
         }
         Vote saved = voteRepository.save(new Vote(restaurantRepository.getReferenceById(restaurantId),
                 userRepository.getReferenceById(user.id()), LocalDateTime.now(clock)));
-        System.out.println(saved);
         return saved;
     }
 

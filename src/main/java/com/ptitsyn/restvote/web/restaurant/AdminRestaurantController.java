@@ -20,11 +20,11 @@ import java.util.List;
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.assureIdConsistent;
 
 @RestController
-@RequestMapping(value = com.ptitsyn.restvote.web.restaurant.RestaurantAdminController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
 @Secured("ROLE_ADMIN")
-public class RestaurantAdminController {
+public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
 
@@ -50,7 +50,8 @@ public class RestaurantAdminController {
     }
 
     @PostMapping
-    ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant, @AuthenticationPrincipal AuthUser authUser) {
+    ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant,
+                                      @AuthenticationPrincipal AuthUser authUser) {
         log.info("Admin {} creating {}", authUser.getUsername(), restaurant);
         Restaurant created = restaurantService.create(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -62,7 +63,8 @@ public class RestaurantAdminController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id, @AuthenticationPrincipal AuthUser authUser) {
+    void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id,
+                @AuthenticationPrincipal AuthUser authUser) {
         log.info("Admin {} updating {}", authUser.getUsername(), restaurant);
         assureIdConsistent(restaurant, id);
         restaurantService.update(restaurant);

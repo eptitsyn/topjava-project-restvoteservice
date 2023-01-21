@@ -29,12 +29,12 @@ public class MenuService {
     }
 
     public Menu get(int restaurantId, LocalDate date) {
-        Restaurant restaurant = restaurantRepository.get(restaurantId);
+        Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         return checkNotFound(menuRepository.findMenuByRestaurantAndDate(restaurant, date), "Menu not found");
     }
 
     public List<Menu> getAll(int restaurantId) {
-        Restaurant restaurant = restaurantRepository.get(restaurantId);
+        Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         return menuRepository.findByRestaurantOrderByDateAsc(restaurant);
     }
 

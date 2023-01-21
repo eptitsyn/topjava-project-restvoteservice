@@ -18,18 +18,17 @@ public interface VoteRepository extends BaseRepository<Vote> {
     Vote findFirstByUser_IdAndCastedBetweenOrderByCastedDesc(@NonNull Integer id, @NonNull LocalDateTime castedStart,
                                                              @NonNull LocalDateTime castedEnd);
 
-
     @EntityGraph(attributePaths = {"restaurant", "user"})
-    @Query("SELECT v FROM Vote v " + "WHERE v.id = (" + "SELECT MAX(vv.id) FROM Vote vv WHERE vv.casted BETWEEN " +
-           ":startDate AND :endDate GROUP BY vv.restaurant)")
+    @Query("""
+            select v from Vote v where v.id = (select max(vv.id) from Vote vv where vv.casted between :startdate and :enddate group by vv.restaurant)
+            """)
     List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);
 
-
     @EntityGraph(attributePaths = {"restaurant", "user"})
     @Query("""
-                SELECT v FROM Vote v WHERE v.id = 
-                (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)
+            select v from Vote v where v.id = 
+            (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)
             """)
     Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param(
             "endDate") LocalDateTime endDate);

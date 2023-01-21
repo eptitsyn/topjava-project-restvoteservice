@@ -21,20 +21,23 @@ public interface VoteRepository extends BaseRepository<Vote> {
 
     @EntityGraph(attributePaths = {"restaurant", "user"})
     @Query("SELECT v FROM Vote v " + "WHERE v.id = (" + "SELECT MAX(vv.id) FROM Vote vv WHERE vv.casted BETWEEN " +
-            ":startDate AND :endDate GROUP BY vv.restaurant)")
+           ":startDate AND :endDate GROUP BY vv.restaurant)")
     List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);
 
 
     @EntityGraph(attributePaths = {"restaurant", "user"})
-    @Query("SELECT v FROM Vote v " + "WHERE v.id = (" + "SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv" +
-            ".casted BETWEEN :startDate AND :endDate)")
+    @Query("""
+                SELECT v FROM Vote v WHERE v.id = 
+                (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)
+            """)
     Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param(
             "endDate") LocalDateTime endDate);
 
     @Query("""
             select new com.ptitsyn.restvote.to.VoteCountTo(v.restaurant.id, v.restaurant.name, CAST(count(v) as int) as voteCount) 
             from Vote v 
+            where v.id = (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = v.user AND vv.casted between :startDate and :endDate)
             group by v.restaurant 
             order by voteCount desc
             """)
@@ -42,6 +45,5 @@ public interface VoteRepository extends BaseRepository<Vote> {
                                               @Param("endDate") LocalDateTime endDate);
 
     @NonNull
-    @EntityGraph(attributePaths = {"restaurant"})
     Vote save(@NonNull Vote vote);
 }

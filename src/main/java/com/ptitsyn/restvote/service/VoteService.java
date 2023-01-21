@@ -10,7 +10,6 @@ import com.ptitsyn.restvote.to.VoteCountTo;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
@@ -43,14 +42,13 @@ public class VoteService {
                 date.plusDays(1).atStartOfDay());
     }
 
-    @CacheEvict(value = "votes", allEntries = true)
+    //    @CacheEvict(value = "votes", allEntries = true)
     public Vote create(int restaurantId, User user) throws VotingClosedException {
         if (LocalTime.now(clock).isAfter(voteFinishTime)) {
             throw new VotingClosedException("Voting is closed at " + voteFinishTime.toString());
         }
-        Vote saved = voteRepository.save(new Vote(restaurantRepository.getReferenceById(restaurantId),
+        return voteRepository.save(new Vote(restaurantRepository.getReferenceById(restaurantId),
                 userRepository.getReferenceById(user.id()), LocalDateTime.now(clock)));
-        return saved;
     }
 
     public Vote findLastVoteForUserForDate(User user, LocalDate date) {

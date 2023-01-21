@@ -15,7 +15,7 @@ public class VoteCountTo {
     @NonNull
     private Integer voteCount;
 
-    public VoteCountTo(Integer restaurantId, String restaurantName, Integer voteCount) {
+    public VoteCountTo(int restaurantId, String restaurantName, int voteCount) {
         this(new Restaurant(restaurantId, restaurantName), voteCount);
     }
 }

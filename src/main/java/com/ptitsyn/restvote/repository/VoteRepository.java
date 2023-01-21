@@ -25,19 +25,19 @@ public interface VoteRepository extends BaseRepository<Vote> {
     List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);
 
-    @EntityGraph(attributePaths = {"restaurant", "user"})
+    @EntityGraph(attributePaths = {"restaurant"})
     @Query("""
-            select v from Vote v where v.id = 
+            select v from Vote v where v.id =
             (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)
             """)
     Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param(
             "endDate") LocalDateTime endDate);
 
     @Query("""
-            select new com.ptitsyn.restvote.to.VoteCountTo(v.restaurant.id, v.restaurant.name, CAST(count(v) as int) as voteCount) 
-            from Vote v 
+            select new com.ptitsyn.restvote.to.VoteCountTo(v.restaurant.id, v.restaurant.name, CAST(count(v) as int) as voteCount)
+            from Vote v
             where v.id = (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = v.user AND vv.casted between :startDate and :endDate)
-            group by v.restaurant 
+            group by v.restaurant
             order by voteCount desc
             """)
     List<VoteCountTo> findAllResultByLastVote(@Param("startDate") LocalDateTime startDate,

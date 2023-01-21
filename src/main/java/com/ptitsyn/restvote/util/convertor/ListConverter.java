@@ -7,22 +7,23 @@ import com.ptitsyn.restvote.model.Dish;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
-public class HashMapConverter implements AttributeConverter<LinkedList<Dish>, String> {
+@Converter
+public class ListConverter implements AttributeConverter<List<Dish>, String> {
 
-    //TODO remove class
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(LinkedList<Dish> customerInfo) {
+    public String convertToDatabaseColumn(List<Dish> dishes) {
 
         String customerInfoJson = null;
         try {
 
-            customerInfoJson = objectMapper.writeValueAsString(customerInfo);
+            customerInfoJson = objectMapper.writeValueAsString(dishes);
         } catch (final JsonProcessingException e) {
             log.error("JSON writing error", e);
         }
@@ -31,12 +32,12 @@ public class HashMapConverter implements AttributeConverter<LinkedList<Dish>, St
     }
 
     @Override
-    public LinkedList<Dish> convertToEntityAttribute(String customerInfoJSON) {
+    public List<Dish> convertToEntityAttribute(String dishesJSON) {
 
-        LinkedList<Dish> customerInfo = null;
+        List<Dish> customerInfo = null;
         try {
-            customerInfo = objectMapper.readValue(customerInfoJSON,
-                    new TypeReference<LinkedList<Dish>>() {
+            customerInfo = objectMapper.readValue(dishesJSON,
+                    new TypeReference<List<Dish>>() {
                     });
         } catch (final IOException e) {
             log.error("JSON reading error", e);

@@ -1,18 +1,21 @@
 package com.ptitsyn.restvote.service;
 
 import com.ptitsyn.restvote.error.DataConflictException;
+import com.ptitsyn.restvote.model.Menu;
 import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.repository.RestaurantRepository;
 import com.ptitsyn.restvote.util.validation.ValidationUtil;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ptitsyn.restvote.util.Util.withTodaysMenu;
 import static com.ptitsyn.restvote.util.validation.ValidationUtil.*;
 
 @Service
@@ -62,5 +65,12 @@ public class RestaurantService {
 
     public List<Restaurant> getAllWithMenuForToday() {
         return repository.findAll(withTodaysMenu());
+    }
+
+    public static Specification<Restaurant> withTodaysMenu() {
+        return (root, query, builder) -> {
+            Join<Restaurant, Menu> menuJoin = root.join("menus", JoinType.LEFT);
+            return builder.equal(menuJoin.get("date"), builder.currentDate());
+        };
     }
 }

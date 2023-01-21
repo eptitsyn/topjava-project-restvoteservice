@@ -1,7 +1,6 @@
 package com.ptitsyn.restvote.to;
 
 import com.ptitsyn.restvote.model.Restaurant;
-import com.ptitsyn.restvote.model.Vote;
 import lombok.*;
 
 @NoArgsConstructor
@@ -16,15 +15,7 @@ public class VoteCountTo {
     @NonNull
     private Integer voteCount;
 
-    public VoteCountTo(@NonNull Restaurant restaurant, @NonNull Long count) {
-        this(restaurant, count.intValue());
-    }
-
-    public VoteCountTo(@NonNull Vote vote, @NonNull Integer count) {
-        this(vote.getRestaurant(), count);
-    }
-
-    public VoteCountTo(@NonNull Vote vote, @NonNull Long count) {
-        this(vote.getRestaurant(), count.intValue());
+    public VoteCountTo(Integer restaurantId, String restaurantName, Integer voteCount) {
+        this(new Restaurant(restaurantId, restaurantName), voteCount);
     }
 }

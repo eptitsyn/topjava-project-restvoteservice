@@ -20,28 +20,24 @@ public interface VoteRepository extends BaseRepository<Vote> {
 
 
     @EntityGraph(attributePaths = {"restaurant", "user"})
-    @Query("SELECT v FROM Vote v " +
-            "WHERE v.id = (" +
-            "SELECT MAX(vv.id) FROM Vote vv WHERE vv.casted BETWEEN :startDate AND :endDate GROUP BY vv.restaurant)")
+    @Query("SELECT v FROM Vote v " + "WHERE v.id = (" + "SELECT MAX(vv.id) FROM Vote vv WHERE vv.casted BETWEEN " +
+            ":startDate AND :endDate GROUP BY vv.restaurant)")
     List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);
 
 
     @EntityGraph(attributePaths = {"restaurant", "user"})
-    @Query("SELECT v FROM Vote v " +
-            "WHERE v.id = (" +
-            "SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)")
-    Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
-                                    @Param("endDate") LocalDateTime endDate);
+    @Query("SELECT v FROM Vote v " + "WHERE v.id = (" + "SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv" +
+            ".casted BETWEEN :startDate AND :endDate)")
+    Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param(
+            "endDate") LocalDateTime endDate);
 
-    //    @EntityGraph(attributePaths = {"restaurant"})
-    @Query("SELECT new com.ptitsyn.restvote.to.VoteCountTo(v.restaurant, COUNT(v) as voteCount) " +
-            "FROM Vote v " +
-            "JOIN v.restaurant r " +
-            "WHERE v.id IN (" +
-            "SELECT MAX(vv.id) FROM Vote vv GROUP BY vv.user" +
-            ") " +
-            "GROUP BY v.restaurant ORDER BY voteCount DESC")
+    @Query("""
+            select new com.ptitsyn.restvote.to.VoteCountTo(v.restaurant.id, v.restaurant.name, CAST(count(v) as int) as voteCount) 
+            from Vote v 
+            group by v.restaurant 
+            order by voteCount desc
+            """)
     List<VoteCountTo> findAllResultByLastVote(@Param("startDate") LocalDateTime startDate,
                                               @Param("endDate") LocalDateTime endDate);
 

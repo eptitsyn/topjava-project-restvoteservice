@@ -1,6 +1,9 @@
 package com.ptitsyn.restvote.to;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -8,10 +11,9 @@ import lombok.*;
 @Setter
 public class VoteTo extends BaseTo {
 
-    @NonNull
     private Integer restaurantId;
 
-    public VoteTo(@NonNull Integer id, @NonNull Integer restaurantId) {
+    public VoteTo(Integer id, Integer restaurantId) {
         super(id);
         this.restaurantId = restaurantId;
     }

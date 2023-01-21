@@ -25,7 +25,6 @@ public class VoteService {
 
     private final UserRepository userRepository;
 
-    //todo pass clock at constructor for testing
     private final Clock clock = Clock.systemDefaultZone();
     @NonNull VoteRepository voteRepository;
     @NonNull RestaurantRepository restaurantRepository;

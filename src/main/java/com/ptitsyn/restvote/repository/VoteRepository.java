@@ -20,7 +20,7 @@ public interface VoteRepository extends BaseRepository<Vote> {
 
     @EntityGraph(attributePaths = {"restaurant", "user"})
     @Query("""
-            select v from Vote v where v.id = (select max(vv.id) from Vote vv where vv.casted between :startdate and :enddate group by vv.restaurant)
+            select v from Vote v where v.id = (select max(vv.id) from Vote vv where vv.casted between :startDate and :endDate group by vv.restaurant)
             """)
     List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);

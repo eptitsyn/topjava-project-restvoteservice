@@ -43,4 +43,13 @@ public interface VoteRepository extends BaseRepository<Vote> {
 
     @NonNull
     Vote save(@NonNull Vote vote);
+
+    @NonNull
+    @Override
+    @Query("""
+            select v from Vote v 
+            join fetch v.user
+            join fetch v.restaurant
+            """)
+    List<Vote> findAll();
 }

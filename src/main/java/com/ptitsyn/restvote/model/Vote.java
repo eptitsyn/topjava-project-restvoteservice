@@ -30,7 +30,6 @@ public class Vote extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-
     @Column(name = "casted", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull

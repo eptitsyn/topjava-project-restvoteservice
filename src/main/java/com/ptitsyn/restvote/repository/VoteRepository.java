@@ -3,7 +3,6 @@ package com.ptitsyn.restvote.repository;
 import com.ptitsyn.restvote.model.User;
 import com.ptitsyn.restvote.model.Vote;
 import com.ptitsyn.restvote.to.VoteCountTo;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
@@ -18,17 +17,16 @@ public interface VoteRepository extends BaseRepository<Vote> {
     Vote findFirstByUser_IdAndCastedBetweenOrderByCastedDesc(@NonNull Integer id, @NonNull LocalDateTime castedStart,
                                                              @NonNull LocalDateTime castedEnd);
 
-    @EntityGraph(attributePaths = {"restaurant", "user"})
     @Query("""
-            select v from Vote v where v.id = (select max(vv.id) from Vote vv where vv.casted between :startDate and :endDate group by vv.restaurant)
+            select v from Vote v join fetch v.restaurant join fetch v.user where v.id in (select max(vv.id) from Vote vv where vv.casted between :startDate and :endDate group by vv.restaurant)
             """)
     List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
                                     @Param("endDate") LocalDateTime endDate);
 
-    @EntityGraph(attributePaths = {"restaurant"})
+    //    @EntityGraph(attributePaths = {"restaurant"})
     @Query("""
             select v from Vote v where v.id =
-            (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = :user AND vv.casted BETWEEN :startDate AND :endDate)
+            (select max(vv.id) from Vote vv where vv.user = :user and vv.casted between :startDate and :endDate)
             """)
     Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param(
             "endDate") LocalDateTime endDate);

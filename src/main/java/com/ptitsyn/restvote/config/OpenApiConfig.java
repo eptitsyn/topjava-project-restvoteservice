@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +31,9 @@ import org.springframework.context.annotation.Configuration;
                         """,
                 contact = @Contact(url = "https://ptitsyn.com", name = "Evgenii Ptitsyn", email = "eptitsyn@gmail.com")
         ),
-        security = @SecurityRequirement(name = "basicAuth")
+        security = @SecurityRequirement(name = "basicAuth"),
+        servers = {@Server(url = "/", description = "Default Server URL")}
+
 )
 public class OpenApiConfig {
 

@@ -61,7 +61,8 @@ server.servlet:
     enabled: true # Enable http encoding support
     force: true
 
-#server:
-#  port: 8081
+server:
+  port: 8080
+
 app:
   voteFinishTime: "11:00"

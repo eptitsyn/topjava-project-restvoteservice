@@ -49,3 +49,11 @@ Vote Results ```/api/admin/votes/{date}/results```
 [//]: # ()
 
 [//]: # (//TBD)
+
+### Note
+
+For correct UTF8 display set enviroment variable
+
+```
+JAVA_TOOL_OPTIONS = -Dfile.encoding=UTF8
+```

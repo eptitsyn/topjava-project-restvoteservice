@@ -1,55 +1,29 @@
 package com.ptitsyn.restvote.repository;
 
+import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.model.User;
 import com.ptitsyn.restvote.model.Vote;
-import com.ptitsyn.restvote.to.VoteCountTo;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends BaseRepository<Vote> {
 
-    Vote findFirstByUser_IdAndCastedBetweenOrderByCastedDesc(@NonNull Integer id, @NonNull LocalDateTime castedStart,
-                                                             @NonNull LocalDateTime castedEnd);
-
+    @Transactional
+    @Modifying
     @Query("""
-            select v from Vote v join fetch v.restaurant join fetch v.user where v.id in (select max(vv.id) from Vote vv where vv.casted between :startDate and :endDate group by vv.restaurant)
-            """)
-    List<Vote> findLastVotesForDate(@Param("startDate") LocalDateTime startDate,
-                                    @Param("endDate") LocalDateTime endDate);
+            update Vote v set v.restaurant = :restaurant, v.castedTime = :castedTime
+            where v.castedDate = :castedDate and v.user = :user""")
+    int updateRestaurantAndCastedTimeByCastedDateAndUser(@NonNull @Param("restaurant") Restaurant restaurant, @NonNull @Param("castedTime") LocalTime castedTime, @NonNull @Param("castedDate") LocalDate castedDate, @NonNull @Param("user") User user);
 
-    //    @EntityGraph(attributePaths = {"restaurant"})
-    @Query("""
-            select v from Vote v where v.id =
-            (select max(vv.id) from Vote vv where vv.user = :user and vv.casted between :startDate and :endDate)
-            """)
-    Vote findLastVoteForUserForDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param(
-            "endDate") LocalDateTime endDate);
+    List<Vote> findByCastedDate(LocalDate castedDate);
 
-    @Query("""
-            select new com.ptitsyn.restvote.to.VoteCountTo(v.restaurant.id, v.restaurant.name, CAST(count(v) as int) as voteCount)
-            from Vote v
-            where v.id = (SELECT MAX(vv.id) FROM Vote vv WHERE vv.user = v.user AND vv.casted between :startDate and :endDate)
-            group by v.restaurant
-            order by voteCount desc
-            """)
-    List<VoteCountTo> findAllResultByLastVote(@Param("startDate") LocalDateTime startDate,
-                                              @Param("endDate") LocalDateTime endDate);
-
-    @NonNull
-    Vote save(@NonNull Vote vote);
-
-    @NonNull
-    @Override
-    @Query("""
-            select v from Vote v 
-            join fetch v.user
-            join fetch v.restaurant
-            """)
-    List<Vote> findAll();
+    Vote findByUserAndCastedDate(User user, LocalDate castedDate);
 }

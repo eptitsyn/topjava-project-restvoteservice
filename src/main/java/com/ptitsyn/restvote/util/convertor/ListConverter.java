@@ -3,7 +3,7 @@ package com.ptitsyn.restvote.util.convertor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptitsyn.restvote.model.Dish;
+import com.ptitsyn.restvote.model.MenuItem;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.AttributeConverter;
@@ -13,17 +13,17 @@ import java.util.List;
 
 @Slf4j
 @Converter
-public class ListConverter implements AttributeConverter<List<Dish>, String> {
+public class ListConverter implements AttributeConverter<List<MenuItem>, String> {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(List<Dish> dishes) {
+    public String convertToDatabaseColumn(List<MenuItem> menuItems) {
 
         String customerInfoJson = null;
         try {
 
-            customerInfoJson = objectMapper.writeValueAsString(dishes);
+            customerInfoJson = objectMapper.writeValueAsString(menuItems);
         } catch (final JsonProcessingException e) {
             log.error("JSON writing error", e);
         }
@@ -32,12 +32,12 @@ public class ListConverter implements AttributeConverter<List<Dish>, String> {
     }
 
     @Override
-    public List<Dish> convertToEntityAttribute(String dishesJSON) {
+    public List<MenuItem> convertToEntityAttribute(String dishesJSON) {
 
-        List<Dish> customerInfo = null;
+        List<MenuItem> customerInfo = null;
         try {
             customerInfo = objectMapper.readValue(dishesJSON,
-                    new TypeReference<List<Dish>>() {
+                    new TypeReference<List<MenuItem>>() {
                     });
         } catch (final IOException e) {
             log.error("JSON reading error", e);

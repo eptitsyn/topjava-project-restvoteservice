@@ -35,5 +35,5 @@ public class Menu extends BaseEntity {
 
     @Column(name = "dishes", nullable = false)
     @Convert(converter = ListConverter.class)
-    private List<Dish> dishes;
+    private List<MenuItem> menuItems;
 }

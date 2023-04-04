@@ -1,8 +1,8 @@
 package com.ptitsyn.restvote.service;
 
 import com.ptitsyn.restvote.error.DataConflictException;
-import com.ptitsyn.restvote.model.Dish;
 import com.ptitsyn.restvote.model.Menu;
+import com.ptitsyn.restvote.model.MenuItem;
 import com.ptitsyn.restvote.model.Restaurant;
 import com.ptitsyn.restvote.repository.MenuRepository;
 import com.ptitsyn.restvote.repository.RestaurantRepository;
@@ -19,6 +19,7 @@ import static com.ptitsyn.restvote.util.validation.ValidationUtil.checkNotFound;
 
 @Service
 public class MenuService {
+
     private final MenuRepository menuRepository;
     private final RestaurantRepository restaurantRepository;
 
@@ -50,7 +51,7 @@ public class MenuService {
     @CacheEvict(value = "menu", allEntries = true)
     public void update(int restaurantId, LocalDate date, Menu menu) {
         menuRepository.save(new Menu(restaurantRepository.getReferenceById(restaurantId), date,
-                new LinkedList<>(List.of(new Dish("asd", 12)))));
+                new LinkedList<>(List.of(new MenuItem("asd", 12)))));
     }
 
     public void delete(int restaurantId, LocalDate date) {

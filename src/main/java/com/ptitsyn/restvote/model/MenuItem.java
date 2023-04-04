@@ -5,21 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
-import java.io.Serializable;
 
 @Getter
 @Setter
-@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dish implements Serializable {
-
-    @NotEmpty
-    private String name;
+public class MenuItem extends NamedEntity {
 
     @PositiveOrZero
     private int price;
+
+    public MenuItem(String name, int price) {
+        super(null, name);
+        this.price = price;
+    }
 }

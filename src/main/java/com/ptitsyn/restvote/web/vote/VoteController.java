@@ -1,6 +1,7 @@
 package com.ptitsyn.restvote.web.vote;
 
 import com.ptitsyn.restvote.model.Vote;
+import com.ptitsyn.restvote.repository.VoteRepository;
 import com.ptitsyn.restvote.service.VoteService;
 import com.ptitsyn.restvote.to.VoteTo;
 import com.ptitsyn.restvote.web.AuthUser;
@@ -25,7 +26,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Secured("IS_AUTHENTICATED_ANONYMOUSLY")
 public class VoteController {
+
     static final String REST_URL = "/api/votes";
+    private final VoteRepository voteRepository;
     private final VoteService voteService;
 
     @PostMapping
@@ -33,7 +36,7 @@ public class VoteController {
     public ResponseEntity<Vote> castUserVote(@AuthenticationPrincipal AuthUser authUser,
                                              @Valid @RequestBody VoteTo voteTo) {
         int restaurantId = voteTo.getRestaurantId();
-        Vote vote = voteService.create(restaurantId, authUser.getUser());
+        Vote vote = voteService.createNow(authUser.getUser(), restaurantId);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -44,6 +47,6 @@ public class VoteController {
 
     @GetMapping
     Vote getTodayLastUserVote(@AuthenticationPrincipal AuthUser authUser) {
-        return voteService.findLastVoteForUserForDate(authUser.getUser(), LocalDate.now());
+        return voteRepository.findByUserAndCastedDate(authUser.getUser(), LocalDate.now());
     }
 }

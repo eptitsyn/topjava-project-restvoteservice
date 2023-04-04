@@ -1,6 +1,7 @@
 package com.ptitsyn.restvote.web.restaurant;
 
 import com.ptitsyn.restvote.model.Restaurant;
+import com.ptitsyn.restvote.repository.RestaurantRepository;
 import com.ptitsyn.restvote.service.RestaurantService;
 import com.ptitsyn.restvote.web.AuthUser;
 import lombok.AllArgsConstructor;
@@ -27,13 +28,13 @@ import static com.ptitsyn.restvote.util.validation.ValidationUtil.assureIdConsis
 public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
-
-    RestaurantService restaurantService;
+    private final RestaurantRepository restaurantRepository;
+    private final RestaurantService restaurantService;
 
     @GetMapping
     public List<Restaurant> getAll(@AuthenticationPrincipal AuthUser authUser) {
         log.info("Admin {} requested list of all restaurants", authUser.getUsername());
-        return restaurantService.getAll();
+        return restaurantRepository.getAll();
     }
 
     @GetMapping("/{id}")

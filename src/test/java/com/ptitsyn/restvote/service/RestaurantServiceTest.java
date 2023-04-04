@@ -5,6 +5,7 @@ import com.ptitsyn.restvote.error.ErrorConstants;
 import com.ptitsyn.restvote.error.IllegalRequestDataException;
 import com.ptitsyn.restvote.error.NotFoundException;
 import com.ptitsyn.restvote.model.Restaurant;
+import com.ptitsyn.restvote.repository.RestaurantRepository;
 import com.ptitsyn.restvote.web.restaurant.RestaurantTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RestaurantServiceTest {
 
     @Autowired
-    RestaurantService service;
+    private RestaurantService service;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     @Test
     public void createWithEmptyName() {
@@ -88,7 +92,7 @@ class RestaurantServiceTest {
     @Test
     void updateWithInvalidId() {
         assertThrows(NotFoundException.class, () -> service.update(new Restaurant(NON_EXISTING_ID, "Updated" +
-                " Name")));
+                                                                                                   " Name")));
     }
 
     @Test
@@ -117,10 +121,7 @@ class RestaurantServiceTest {
 
     @Test
     void getAll() {
-//        for (Restaurant restaurant : RestaurantTestData.restaurants) {
-//            service.create(dropId(restaurant));
-//        }
-        List<Restaurant> all = service.getAll();
+        List<Restaurant> all = restaurantRepository.getAll();
         RestaurantTestData.RESTAURANT_MATCHER.assertMatch(all, RestaurantTestData.restaurants);
     }
 

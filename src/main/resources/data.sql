@@ -17,23 +17,23 @@ VALUES (1, 'Manon'),
 ALTER TABLE RESTAURANT
     ALTER COLUMN id RESTART WITH 4;
 
-INSERT INTO MENU (DATE, RESTAURANT_ID, DISHES)
-VALUES (CURRENT_DATE, 1, '[{"name":"Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
-       (CURRENT_DATE, 2, '[{"name":"Минестроне","price":12}]'),
-       (CURRENT_DATE, 3, '[{"name":"Паэлья","price":12}]'),
-       (DATEADD(DAY, 1, CURRENT_DATE), 1,
-        '[{"name":"Завтрашняя Репа паренная","price":12}, {"name":"Завтрашний Борщ","price":34}]'),
-       (DATEADD(DAY, 1, CURRENT_DATE), 2, '[]'),
-       (DATEADD(DAY, 1, CURRENT_DATE), 3, '[]'),
-       (DATEADD(DAY, -1, CURRENT_DATE), 1,
-        '[{"name":"Вчерашняя Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
-       (DATEADD(DAY, -1, CURRENT_DATE), 2, '[]'),
-       (DATEADD(DAY, -1, CURRENT_DATE), 3, '[]');
-
-
-INSERT INTO VOTE (CASTED, RESTAURANT_ID, USER_ID)
-VALUES (TIMESTAMPADD(HOUR, 10, CURRENT_DATE), 1, 1),
-       (TIMESTAMPADD(HOUR, 10, TIMESTAMPADD(MINUTE, 10, CURRENT_DATE)), 2, 1),
-       (TIMESTAMPADD(HOUR, 9, TIMESTAMPADD(MINUTE, 1, CURRENT_DATE)), 2, 2),
-       (TIMESTAMPADD(HOUR, 10, TIMESTAMPADD(MINUTE, 10, CURRENT_DATE)), 2, 2),
-       (TIMESTAMPADD(HOUR, 10, TIMESTAMPADD(MINUTE, 10, CURRENT_DATE)), 1, 3);
+-- INSERT INTO MENU (DATE, RESTAURANT_ID, DISHES)
+-- VALUES (CURRENT_DATE, 1, '[{"name":"Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
+--        (CURRENT_DATE, 2, '[{"name":"Минестроне","price":12}]'),
+--        (CURRENT_DATE, 3, '[{"name":"Паэлья","price":12}]'),
+--        (DATEADD(DAY, 1, CURRENT_DATE), 1,
+--         '[{"name":"Завтрашняя Репа паренная","price":12}, {"name":"Завтрашний Борщ","price":34}]'),
+--        (DATEADD(DAY, 1, CURRENT_DATE), 2, '[]'),
+--        (DATEADD(DAY, 1, CURRENT_DATE), 3, '[]'),
+--        (DATEADD(DAY, -1, CURRENT_DATE), 1,
+--         '[{"name":"Вчерашняя Репа паренная","price":12}, {"name":"Борщ","price":34}]'),
+--        (DATEADD(DAY, -1, CURRENT_DATE), 2, '[]'),
+--        (DATEADD(DAY, -1, CURRENT_DATE), 3, '[]');
+--
+--
+INSERT INTO VOTE (CASTED_DATE, CASTED_TIME, RESTAURANT_ID, USER_ID)
+VALUES (DATEADD(DAY, -1, CURRENT_DATE), '9:00:00', 1, 1),
+       (DATEADD(DAY, -2, CURRENT_DATE), '8:00:00', 2, 1),
+       (DATEADD(DAY, -1, CURRENT_DATE), '9:00:00', 2, 2),
+       (DATEADD(DAY, -2, CURRENT_DATE), '10:00:00', 2, 2),
+       (DATEADD(DAY, -1, CURRENT_DATE), '10:30:00', 1, 3);

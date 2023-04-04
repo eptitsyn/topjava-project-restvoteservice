@@ -28,6 +28,13 @@ public class RestaurantService {
         this.repository = repository;
     }
 
+    public static Specification<Restaurant> withTodaysMenu() {
+        return (root, query, builder) -> {
+            Join<Restaurant, Menu> menuJoin = root.join("menus", JoinType.LEFT);
+            return builder.equal(menuJoin.get("date"), builder.currentDate());
+        };
+    }
+
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
@@ -59,18 +66,7 @@ public class RestaurantService {
         }
     }
 
-    public List<Restaurant> getAll() {
-        return repository.getAll();
-    }
-
     public List<Restaurant> getAllWithMenuForToday() {
         return repository.findAll(withTodaysMenu());
-    }
-
-    public static Specification<Restaurant> withTodaysMenu() {
-        return (root, query, builder) -> {
-            Join<Restaurant, Menu> menuJoin = root.join("menus", JoinType.LEFT);
-            return builder.equal(menuJoin.get("date"), builder.currentDate());
-        };
     }
 }

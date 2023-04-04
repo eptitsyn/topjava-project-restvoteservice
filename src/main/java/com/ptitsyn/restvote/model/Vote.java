@@ -3,15 +3,15 @@ package com.ptitsyn.restvote.model;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @NamedEntityGraph(name = "Vote.restaurant", attributeNodes = @NamedAttributeNode("restaurant"))
-@Table(name = "vote")
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "casted_date"})})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,8 +30,11 @@ public class Vote extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @Column(name = "casted", nullable = false)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Column(name = "casted_date", nullable = false)
     @NotNull
-    private LocalDateTime casted;
+    private LocalDate castedDate;
+
+    @Column(name = "casted_time", nullable = false)
+    @NotNull
+    private LocalTime castedTime;
 }
